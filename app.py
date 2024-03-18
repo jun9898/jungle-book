@@ -14,6 +14,8 @@ app.config['JWT_SECRET_KEY'] = SECRET_KEY
 jwt = JWTManager(app)
 
 
+PAGE_LIMIT = 10
+
 @app.route('/')
 def home():
    return 'hello flask!'
@@ -58,14 +60,16 @@ def login():
 @app.route('/list', methods=['GET'])
 @jwt_required()
 def list():
-   users = db.jungle.find({}, {"_id": 0})
+   page = int(request.args.get("page"))
+   offset  = (page - 1) * PAGE_LIMIT
+   users = db.jungle.find({}, {"_id": 0}).limit(PAGE_LIMIT).skip(offset)
    user_list = [user for user in users]
    return jsonify({"result": "success", "users": user_list})
 
 
-@app.route('/getUser', methods=['GET'])
+@app.route('/profile', methods=['GET'])
 @jwt_required()
-def getUser():
+def getProfile():
    user_id = request.form['user_id']
    user = db.jungle.find_one({'user_id': user_id}, {"_id": 0})
    return jsonify({"result": "success", "user": user})
