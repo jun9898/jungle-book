@@ -1,4 +1,3 @@
-import datetime
 import hashlib
 
 from flask import Flask, jsonify, request
@@ -29,9 +28,9 @@ def api_register():
 
    pw_hash = hashlib.sha256(user_pw.encode('utf-8')).hexdigest()
 
-   find_one = db.jungle.find_one({'user_id': user_id})
+   result = db.jungle.find_one({'user_id': user_id})
 
-   if find_one is None:
+   if result is None:
       db.jungle.insert_one(
          {"user_id": user_id, "user_pw": pw_hash, "user_name": user_name})
       return jsonify({"status": "success"})
@@ -47,20 +46,30 @@ def login():
 
    pw_hash = hashlib.sha256(user_pw.encode('utf-8')).hexdigest()
 
-   find_one = db.find_one[{'user_id': user_id, 'user_pw': pw_hash}]
+   result = db.find_one[{'user_id': user_id, 'user_pw': pw_hash}]
 
-   if find_one is not None:
+   if result is not None:
       token = create_access_token(identity=user_id)
       return jsonify({"result": "success", "token": token})
    else:
       return jsonify({"result": "fail"})
 
 
-@app.route('/login_test', methods=['GET'])
+@app.route('/list', methods=['GET'])
 @jwt_required()
-def login_test():
-   return jsonify({"result": "success"})
+def list():
+   users = db.jungle.find({}, {"_id": 0})
+   user_list = [user for user in users]
+   return jsonify({"result": "success", "users": user_list})
+
+
+@app.route('/getUser', methods=['GET'])
+@jwt_required()
+def getUser():
+   user_id = request.form['user_id']
+   user = db.jungle.find_one({'user_id': user_id}, {"_id": 0})
+   return jsonify({"result": "success", "user": user})
 
 
 if __name__ == '__main__':
-   app.run('0.0.0.0', port=5000, debug=True)
+   app.run('0.0.0.0', port=5001, debug=True)
