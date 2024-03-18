@@ -1,16 +1,16 @@
+import datetime
 import hashlib
 
-from bson import ObjectId
 from flask import Flask, jsonify, request
-from flask_jwt_extended import *
+
+import jwt
 from pymongo import MongoClient
+from secret_key import SECRET_KEY
 client = MongoClient('localhost', 27017)
 db = client.jungle
 
-admin_id = "1234"
-admin_pw = "qwer"
-
 app = Flask(__name__)
+
 
 @app.route('/')
 def home():
@@ -18,11 +18,11 @@ def home():
 
 
 @app.route('/sign_in', methods=['POST'])
-def api_regoster():
+def api_register():
 
-   user_id = request.form['id']
-   user_pw = request.form['pw']
-   user_name = request.form['name']
+   user_id = request.form['user_id']
+   user_pw = request.form['user_pw']
+   user_name = request.form['user_name']
 
    pw_hash = hashlib.sha256(user_pw.encode('utf-8')).hexdigest()
 
@@ -31,36 +31,31 @@ def api_regoster():
 
    if find_one is None:
 
-      db.jungle.insert_one({"user_id" : user_id, "user_pw" : pw_hash, "user_name" : user_name})
+      db.jungle.insert_one(
+         {"user_id": user_id, "user_pw": pw_hash, "user_name": user_name})
       return jsonify({"status": "success"})
 
    # 로그인 실패 로직
-   return jsonify({"status" : "error", "errormsg" : "User already exists"})
-
+   return jsonify({"status": "error", "errormsg": "User already exists"})
 
 
 @app.route('/login', methods=['POST'])
-def login_proc():
+def login():
+   user_id = request.form['user_id']
+   user_pw = request.form['user_pw']
 
-   input_data = request.get_json()
-   user_id = input_data['id']
-   user_pw = input_data['pw']
+   pw_hash = hashlib.sha256(user_pw.encode('utf-8')).hexdigest()
 
-   if (user_id == admin_id and
-           user_pw == admin_pw):
-      return jsonify(
-         result="success",
-         # 검증된 경우, access 토큰 반환
-         access_token=create_access_token(identity=user_id,
-                                          expires_delta=False)
-      )
+   find_one = db.find_one[{'user_id': user_id, 'user_pw': pw_hash}]
 
-   # 아이디, 비밀번호가 일치하지 않는 경우
-   else:
-      return jsonify(
-         result="Invalid Params!"
-      )
+   if find_one is not None:
+      payload = {
+         'user_id': user_id,
+         'exp': datetime.datetime.now()
+      }
+      token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+      return jsonify({"result": "success", "token": token})
 
 
 if __name__ == '__main__':
-   app.run('0.0.0.0',port=5000,debug=True)
+   app.run('0.0.0.0', port=5001, debug=True)
