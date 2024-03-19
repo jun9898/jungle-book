@@ -2,8 +2,10 @@ import hashlib
 from flask import Flask, jsonify, request
 from route import bp
 from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required
+from pymongo import MongoClient
 from secret_key import SECRET_KEY
-from database import db
+client = MongoClient('localhost', 27017)
+db = client.jungle
 
 app = Flask(__name__)
 
@@ -12,6 +14,7 @@ app.register_blueprint(bp)
 jwt = JWTManager(app)
 
 PAGE_LIMIT = 10
+
 
 @app.route('/sign_in', methods=['POST'])
 def api_register():
@@ -25,7 +28,7 @@ def api_register():
     file = request.files['user_profile']
     if file.filename == "":
         return jsonify({"result": "No selected file"})
-    save_path = './profile/' + file.filename
+    save_path = './static/profile/' + file.filename
     file.save(save_path)
 
     pw_hash = hashlib.sha256(user_pw.encode('utf-8')).hexdigest()
@@ -57,6 +60,14 @@ def login():
         return jsonify({"result": "fail"})
 
 
+@app.route('/list', methods=['GET'])
+@jwt_required()
+def list():
+    users = db.jungle.find({}, {"_id": 0})
+    user_list = [user for user in users]
+    return jsonify({"result": "success", "users": user_list})
+
+
 @app.route('/get_user', methods=['GET'])
 @jwt_required()
 def get_user():
@@ -85,6 +96,26 @@ def add_comment():
     )
 
     return jsonify({"result": "success", "comment": comment})
+
+
+@app.route('/random_users', methods=['GET'])
+# @jwt_required()
+def quiz():
+    query = [
+        {'$sample': {'size': 10}},
+        {'$project': {'_id': 0, 'user_id': 1, 'user_name': 1,
+                      'user_profile': 1}}
+    ]
+    random_users = db.jungle.aggregate(query)
+    users = [user for user in random_users]
+    return jsonify({"result": "success", "users": users})
+
+
+@app.route('/score', methods=['POST'])
+# @jwt_required()
+def score():
+    score = request.form['score']
+    return jsonify({"result": "success", "score": score})
 
 
 if __name__ == '__main__':
