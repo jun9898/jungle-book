@@ -6,9 +6,9 @@ bp = Blueprint('routes', __name__)
 def main():
     return render_template('index.html')
 
-# @bp.route('/login')
-# def login():
-#     return render_template('login.html')
+@bp.route('/login')
+def login():
+    return render_template('login.html')
     
 # @bp.route('/sign_in')
 # def sign_in():
