@@ -4,7 +4,7 @@
     <title>Home</title>
     <link rel="stylesheet" href="/static/css/home.css">
     {% include 'header.html' %}
-    
+
 </head>
 <body>
 <div class="container text-center">
@@ -31,8 +31,12 @@
         </div>
     </div>
     <div class="button-container">
-        <button class="btn btn-primary button_main" onClick="location.href='/list'"><h3>회원 리스트</h3></button>
-        <button class="btn btn-primary button_main"><h3>이름 맞추기</h3></button>
+        <button class="btn btn-primary button_main" onclick="location.href='/list'">
+            <h3>회원 리스트</h3>
+        </button>
+        <button class="btn btn-primary button_main">
+            <h3>이름 맞추기</h3>
+        </button>
     </div>
 </div>
 </body>

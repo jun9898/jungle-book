@@ -1,8 +1,7 @@
 import hashlib
 from flask import Flask, jsonify, request
 from route import bp
-from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required
-from pymongo import MongoClient
+from flask_jwt_extended import JWTManager, create_refresh_token, create_access_token, get_jwt_identity, jwt_required
 from secret_key import SECRET_KEY
 client = MongoClient('localhost', 27017)
 db = client.jungle
@@ -44,20 +43,24 @@ def api_register():
     return jsonify({"status": "error", "errormsg": "User already exists"})
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/user-login', methods=['POST'])
 def login():
     user_id = request.form['user_id']
     user_pw = request.form['user_pw']
 
     pw_hash = hashlib.sha256(user_pw.encode('utf-8')).hexdigest()
 
-    result = db.find_one[{'user_id': user_id, 'user_pw': pw_hash}]
+    result = db.jungle.find_one({'user_id': user_id, 'user_pw': pw_hash})
 
     if result is not None:
-        token = create_access_token(identity=user_id)
-        return jsonify({"result": "success", "token": token})
+        access_token = create_access_token(identity=user_id)
+        refresh_token = create_refresh_token(identity=user_id)
+        tokens = {'access_token': access_token, 'refresh_token': refresh_token}
+        return jsonify({"result": "success", "tokens": tokens})
     else:
-        return jsonify({"result": "fail"})
+        response = jsonify({"error": "로그인에 실패했습니다."})
+        response.status_code = 401  # Unauthorized
+        return response
 
 
 @app.route('/list', methods=['GET'])
