@@ -13,14 +13,7 @@ app.config['JWT_SECRET_KEY'] = SECRET_KEY
 app.register_blueprint(bp)
 jwt = JWTManager(app)
 
-
 PAGE_LIMIT = 10
-
-
-@app.route('/')
-def home():
-    return 'hello flask!'
-
 
 @app.route('/sign_in', methods=['POST'])
 def api_register():
