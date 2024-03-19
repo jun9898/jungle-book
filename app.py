@@ -1,21 +1,21 @@
 import hashlib
-
 from flask import Flask, jsonify, request
-
+from route import bp
 from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required
 from pymongo import MongoClient
 from secret_key import SECRET_KEY
-import os
 client = MongoClient('localhost', 27017)
 db = client.jungle
 
 app = Flask(__name__)
 
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
+app.register_blueprint(bp)
 jwt = JWTManager(app)
 
 
 PAGE_LIMIT = 10
+
 
 @app.route('/')
 def home():
