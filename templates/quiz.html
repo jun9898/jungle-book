@@ -6,6 +6,75 @@
     {% include 'header.html' %}
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/css/quiz.css">
+    <script>
+        var count_num = 1;
+        var user = [];
+        var score = 0;
+        $(document).ready(function () {
+            $(".bi-caret-right-fill").hide();
+            $.ajax({
+                url: "/random_users",
+                type: "GET",
+                data: "",
+                success: function (response) {
+                    for (var i = 0; i < response.users.length; i++) {
+                        user[i + 1] = response.users[i];
+                        console.log(user[i + 1]);
+                    }
+                    display_user_image();
+                    display_count_num();
+                }
+            });
+            score = 0;
+        });
+
+        function answer_check() {
+            var answer = $("input").val();
+            console.log(answer);
+            console.log(user[count_num]);
+            if (answer == user[count_num].user_name) {
+                console.log("정답입니다.");
+                score++;
+            } else {
+                console.log("오답입니다.");
+            }
+            $(".bi-caret-right-fill").show();
+            $("#answer").prop("disabled", true);
+            $(".btn").prop("disabled", true);
+        }
+
+        // 다음 유저 출력
+        function next_user() {
+            $("#answer").prop("disabled", false);
+            $(".btn").prop("disabled", false);
+            console.log("다음 유저 출력");
+            $(".bi-caret-right-fill").hide();
+            if (count_num >= 10) {
+                localStorage.setItem("score", score);
+                window.location.href = '/result';
+            } else {
+                count_num++;
+            }
+            display_count_num();
+            display_user_image();
+            $("#answer").val("");
+        }
+
+        function display_user_image() {
+            if (user[count_num]) {
+                var profileFileName = user[count_num].user_profile;
+                var encodedProfileFileName = encodeURIComponent(profileFileName);
+                $(".user_profile").attr("src", "../static/profile/" + encodedProfileFileName);
+            } else {
+                console.log("해당 유저가 없습니다.");
+            }
+        }
+        // 숫자 1 -> 10까지 증가시킨 값 변경해주기
+        function display_count_num() {
+            $(".count_num").text(count_num + " / 10");
+        }
+    </script>
+
 </head>
 
 <body>
@@ -14,15 +83,16 @@
             <img src="/static/assat/whos_that.png">
         </div>
         <div class="count_num">
-            1 / 10
+            <!-- 카운트 삽입 -->
         </div>
-        <div>
-            <img src="/static/assat/default_profile.jpeg" alt="" class="user_profile">
+        <div class="img_box">
+            <img src="" alt="" class="user_profile">
+            <i class="bi bi-caret-right-fill" onclick="next_user()"></i>
         </div>
         <div class="input-background">
             <div class="input-group">
-                <input type="text" class="form-control">
-                <button type="button" class="btn btn-outline-secondary">정답 제출</button>
+                <input type="text" class="form-control" id="answer">
+                <button type="button" class="btn btn-outline-secondary" onclick="answer_check()">정답 제출</button>
             </div>
         </div>
     </div>

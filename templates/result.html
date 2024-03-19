@@ -6,6 +6,22 @@
     {% include 'header.html' %}
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/css/result.css">
+    <script>
+        var score = localStorage.getItem('score');
+
+        $(document).ready(function () {
+            display_score()
+        })
+
+        function display_score() {
+            $(".score-board").text(score + " / 10");
+        }
+
+        function go_home() {
+            localStorage.removeItem("score");
+            location.href='/';
+        }
+    </script>
 </head>
 
 <body>
@@ -14,9 +30,8 @@
             <img src="/static/assat/your_score.png">
         </div>
         <div class="score-board">
-            6 / 10
         </div>
-        <button type="button" class="btn btn-outline-secondary">Home</button>
+        <button type="button" class="btn btn-outline-secondary" onclick="go_home()">Home</button>
     </div>
 </body>
 
