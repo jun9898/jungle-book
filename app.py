@@ -15,6 +15,8 @@ app.config['JWT_SECRET_KEY'] = SECRET_KEY
 jwt = JWTManager(app)
 
 
+PAGE_LIMIT = 10
+
 @app.route('/')
 def home():
     return 'hello flask!'
