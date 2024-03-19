@@ -1,43 +1,68 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        {% include 'login_header.html' %}
-        <link rel="stylesheet" href="/static/css/login.css">
-    </head>
+<head>
+    <meta charset="utf-8">
+    {% include 'login_header.html' %}
+    <link rel="stylesheet" href="/static/css/login.css">
+    <script>
+        $(document).ready(function() {
+            $("form").submit(function(event) {
+                event.preventDefault();
 
-    <body>
+                var formData = new FormData($(this)[0]);
 
-        <div>
-            <img class="label" onclick="location.href='/'"  src="./static/assat/jungle_book.png"><br>
-        </div>
+                $.ajax({
+                    url: "/user-login",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        const tokens = response.tokens
+                        alert("로그인 성공!")
+                        localStorage.setItem("accessToken", tokens.access_token)
+                        localStorage.setItem("refreshToken", tokens.refresh_token)
+                        window.location.href = "/";
+                    },
+                    error: function(xhr, status, error) {
+                        alert("로그인 실패!")
+                        window.location.href = "/login";
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div>
+    <img class="label" onclick="location.href='/'"  src="./static/assat/jungle_book.png"><br>
+</div>
 
-        <div>
-            
-        </div>
-        <div style="padding: 50px;">
-            <div class="posting-box">
-                <h1 style="text-align:center; font-weight : bold;">Login</h1>
-    
-                <hr  style="border: solid 3px black; width: 70%; margin-left: auto; margin-right: auto;"><br>
-                
-                <form>
-                    <div class="input-box">
-                        <h3 style="font-weight: bold; font-size: 23px;">ID</h3>
-                        <input style="width:400px;height:40px;" type="ID" class="form-ID"><br><br>
-                        <h3 style="font-weight: bold; font-size: 23px;">PASSWORD</h3>
-                        <input style="width:400px;height:40px;" type="password" class="form-ID"><br>
-                        
-                        <div class="btn">
-                            <button class="btn-deco" style="line-height: 10px; color: white">Login</button><br>
-                        </div>
-                        <div style="text-align: center;">
-                            <a href="#"  style="font-size: 20px;color: black;">sing_in</a>
-                        </div>
-                    </div>
-                </form>
+<div>
+
+</div>
+<div style="padding: 50px;">
+    <div class="posting-box">
+        <h1 style="text-align:center; font-weight : bold;">Login</h1>
+
+        <hr  style="border: solid 1px #000000; width: 70%; margin-left: auto; margin-right: auto;"><br>
+
+        <form method="POST" action="/login">
+            <div class="input-box">
+                <h3 style="font-weight: bold; font-size: 23px;">ID</h3>
+                <input style="width:400px;height:40px;" type="text" name="user_id" class="form-ID"><br><br>
+                <h3 style="font-weight: bold; font-size: 23px;">PASSWORD</h3>
+                <input style="width:400px;height:40px;" type="password" name="user_pw" class="form-PASSWORD"><br>
+
+                <div class="btn">
+                    <button type="submit" class="btn-deco" style="line-height: 10px; color: white">Login</button><br>
+                </div>
+                <div style="text-align: center;">
+                    <a href="sign_in" style="font-size: 20px; color: black; text-decoration: none;">sign_in</a>
+                </div>
             </div>
-        </div>
-        
-    </body>
+        </form>
+    </div>
+</div>
+</body>
 </html>
