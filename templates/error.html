@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/error.css">
+</head>
+<body>
+<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; text-align: center;">
+    <div class="posting-box" style="display: inline-block; text-align: center;">
+        <h1 style="font-weight: bold;">ERROR!</h1>
+
+        <hr style="border: solid 1px #000000; width: 700px; margin: auto;"><br>
+        <h3>
+            {{ error }}
+        </h3>
+        <button class="btn btn-primary error-btn" onclick="location.href='/'">메인으로</button>
+    </div>
+</div>
+
+</body>
+</html>

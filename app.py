@@ -1,12 +1,10 @@
 import hashlib
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from route import bp
-from flask_jwt_extended import JWTManager, create_refresh_token, create_access_token, get_jwt_identity, jwt_required
-from pymongo import MongoClient
+from flask_jwt_extended import JWTManager, create_refresh_token, create_access_token, get_jwt_identity, jwt_required, \
+    set_access_cookies, set_refresh_cookies
 from secret_key import SECRET_KEY
-client = MongoClient('localhost', 27017)
-db = client.jungle
-
+from database import db
 
 app = Flask(__name__)
 
@@ -57,20 +55,14 @@ def login():
     if result is not None:
         access_token = create_access_token(identity=user_id)
         refresh_token = create_refresh_token(identity=user_id)
-        tokens = {'access_token': access_token, 'refresh_token': refresh_token}
-        return jsonify({"result": "success", "tokens": tokens})
+        resp = jsonify({'login': True})
+        set_access_cookies(resp, access_token)
+        set_refresh_cookies(resp, refresh_token)
+        return resp, 200
     else:
         response = jsonify({"error": "로그인에 실패했습니다."})
         response.status_code = 401  # Unauthorized
         return response
-
-
-@app.route('/list', methods=['GET'])
-@jwt_required()
-def list():
-    users = db.jungle.find({}, {"_id": 0})
-    user_list = [user for user in users]
-    return jsonify({"result": "success", "users": user_list})
 
 
 @app.route('/get_user', methods=['GET'])
@@ -101,6 +93,11 @@ def add_comment():
     )
 
     return jsonify({"result": "success", "comment": comment})
+
+@app.errorhandler(ValueError)
+def handle_value_error(error):
+    # 에러를 받아서 에러 페이지를 렌더링합니다.
+    return render_template('error.html', error=error), 400
 
 
 @app.route('/random_users', methods=['GET'])
