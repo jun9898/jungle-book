@@ -5,20 +5,22 @@
 
 .count_num {
     font-size: 2.5rem;
-    margin: 1.5rem;
+    font-weight: 800;
+    margin: 2.5rem;
 }
 
 .user_profile {
     max-width: 480px;
+    height: auto;
     width: 30rem;
-    margin-bottom: 3rem;
+    margin-bottom: 5rem;
     border-radius: 30px;
 }
 
 .input-background {
     background-color: rgb(54, 62, 59);
     max-width: 800px;
-    min-height: 100px;
+    min-height: 90px;
     margin: 0 auto;
     border-radius: 40px;
     display: flex;
@@ -28,7 +30,7 @@
 
 .input-group {
     max-width: 700px;
-    min-height: 50px;
+    min-height: 40px;
     width: 100%;
     display: flex;
     justify-content: space-between; /* 좌우 간격 균등 분배 */
@@ -36,7 +38,7 @@
 }
 
 .form-control {
-    width: calc(100% - 100px);
+    width: calc(100% - 80px);
     border: none; /* 테두리 없음 */
     border-radius: 30px;
 }
