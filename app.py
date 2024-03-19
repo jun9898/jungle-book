@@ -2,10 +2,8 @@ import hashlib
 from flask import Flask, jsonify, request
 from route import bp
 from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required
-from pymongo import MongoClient
 from secret_key import SECRET_KEY
-client = MongoClient('localhost', 27017)
-db = client.jungle
+from database import db
 
 app = Flask(__name__)
 
@@ -57,14 +55,6 @@ def login():
         return jsonify({"result": "success", "token": token})
     else:
         return jsonify({"result": "fail"})
-
-
-@app.route('/list', methods=['GET'])
-@jwt_required()
-def list():
-    users = db.jungle.find({}, {"_id": 0})
-    user_list = [user for user in users]
-    return jsonify({"result": "success", "users": user_list})
 
 
 @app.route('/get_user', methods=['GET'])
