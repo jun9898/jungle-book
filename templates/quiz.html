@@ -12,6 +12,7 @@
         var score = 0;
         $(document).ready(function () {
             $(".bi-caret-right-fill").hide();
+            $("#answerMessage").hide();
             $.ajax({
                 url: "/random_users",
                 type: "GET",
@@ -30,13 +31,12 @@
 
         function answer_check() {
             var answer = $("input").val();
-            console.log(answer);
-            console.log(user[count_num]);
+            $("#answerMessage").show();
             if (answer == user[count_num].user_name) {
-                console.log("정답입니다.");
+                $("#answerMessage").html("정답입니다!");
                 score++;
             } else {
-                console.log("오답입니다.");
+                $("#answerMessage").html("<strong style='color:red;'>" + answer + "</strong>" + "(이)라구요? 틀렸습니다...&nbsp아.. 제 이름은&nbsp" + "<strong style='color:yellow;'>" + user[count_num].user_name + "</strong>" + " 입니다!");
             }
             $(".bi-caret-right-fill").show();
             $("#answer").prop("disabled", true);
@@ -45,6 +45,8 @@
 
         // 다음 유저 출력
         function next_user() {
+            $("#answerMessage").text("");
+            $("#answerMessage").hide();
             $("#answer").prop("disabled", false);
             $(".btn").prop("disabled", false);
             console.log("다음 유저 출력");
@@ -73,6 +75,14 @@
         function display_count_num() {
             $(".count_num").text(count_num + " / 10");
         }
+
+        function enterKey() {
+            answer_check()
+        }
+
+        function change_css() {
+            $(".input-group").attr("style", "height:200px")
+        }
     </script>
 
 </head>
@@ -91,10 +101,11 @@
         </div>
         <div class="input-background">
             <div class="input-group">
-                <input type="text" class="form-control" id="answer">
+                <input type="text" class="form-control" id="answer" onkeypress="if( event.keyCode == 13 ){enterKey();}">
                 <button type="button" class="btn btn-outline-secondary" onclick="answer_check()">정답 제출</button>
             </div>
         </div>
+        <div id="answerMessage"></div>
     </div>
 </body>
 
