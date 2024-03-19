@@ -10,7 +10,8 @@
 }
 
 .user_profile {
-    max-width: 480px;
+    max-width: 300px;
+    max-height: 500px;
     height: auto;
     width: 30rem;
     margin-bottom: 5rem;
@@ -50,4 +51,12 @@
     color: white;
     border: none;
     border-radius: 30px;
+}
+
+.bi-caret-right-fill{
+    position: absolute;
+    right: 14%;
+    transform: translateX(50%);
+    color: #00d67a;
+    font-size: 12rem;
 }

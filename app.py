@@ -14,6 +14,7 @@ jwt = JWTManager(app)
 
 PAGE_LIMIT = 10
 
+
 @app.route('/sign_in', methods=['POST'])
 def api_register():
 
@@ -26,7 +27,7 @@ def api_register():
     file = request.files['user_profile']
     if file.filename == "":
         return jsonify({"result": "No selected file"})
-    save_path = './profile/' + file.filename
+    save_path = './static/profile/' + file.filename
     file.save(save_path)
 
     pw_hash = hashlib.sha256(user_pw.encode('utf-8')).hexdigest()
@@ -44,7 +45,6 @@ def api_register():
 
 @app.route('/user-login', methods=['POST'])
 def login():
-
     user_id = request.form['user_id']
     user_pw = request.form['user_pw']
 
@@ -98,6 +98,26 @@ def add_comment():
 def handle_value_error(error):
     # 에러를 받아서 에러 페이지를 렌더링합니다.
     return render_template('error.html', error=error), 400
+
+
+@app.route('/random_users', methods=['GET'])
+# @jwt_required()
+def quiz():
+    query = [
+        {'$sample': {'size': 10}},
+        {'$project': {'_id': 0, 'user_id': 1, 'user_name': 1,
+                      'user_profile': 1}}
+    ]
+    random_users = db.jungle.aggregate(query)
+    users = [user for user in random_users]
+    return jsonify({"result": "success", "users": users})
+
+
+@app.route('/score', methods=['POST'])
+# @jwt_required()
+def score():
+    score = request.form['score']
+    return jsonify({"result": "success", "score": score})
 
 
 if __name__ == '__main__':
