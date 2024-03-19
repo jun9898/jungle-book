@@ -3,12 +3,29 @@
 
 <head>
     <title>Quiz</title>
+    {% include 'header.html' %}
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/css/quiz.css">
 </head>
 
 <body>
-    <div></div>
+    <div class="quiz">
+        <div>
+            <img src="/static/assat/whos_that.png">
+        </div>
+        <div class="count_num">
+            1/10
+        </div>
+        <div>
+            <img src="/static/assat/default_profile.jpeg" alt="" class="user_profile">
+        </div>
+        <div class="input-background">
+            <div class="input-group">
+                <input type="text" class="form-control">
+                <button type="button" class="btn btn-outline-secondary">정답 제출</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
