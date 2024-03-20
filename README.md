@@ -64,7 +64,7 @@
     </tr>
     <tr>
         <td>
-            <img src="https://github.com/jun9898/jungle_book/assets/129564528/66281421-5506-46ec-a23c-16580159e1aa"/>
+            <img src="https://github.com/jun9898/jungle_book/assets/129564528/1bfee802-0614-41ee-b900-23cabb309f58"/>
         </td>
     </tr>
     <tr>
