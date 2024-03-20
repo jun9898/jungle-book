@@ -11,7 +11,15 @@ PAGE_SIZE = 5
 
 @bp.route('/')
 def home():
-    return render_template('index.html')
+    query = [
+        {'$sample': {'size': 10}},
+        {'$project': {'_id': 0, 'user_id': 1, 'user_name': 1,
+                      'user_profile': 1}}
+    ]
+    random_users = db.jungle.aggregate(query)
+    users = [user for user in random_users]
+
+    return render_template('index.html', data=users)
 
 @bp.route('/login')
 def login():
@@ -25,10 +33,7 @@ def sign_in():
 @require_access_token
 def list(decode_token):
 
-    print(decode_token)
-
     page_list = []
-
     total_count = db.jungle.count_documents({})
     total_page = math.ceil(total_count / CONTENT_SIZE)
     cur_page = request.args.get('page', 1, type=int)
@@ -45,12 +50,6 @@ def list(decode_token):
     users = db.jungle.find({}, {"_id": 0, "user_pw": 0}).skip((cur_page-1) * CONTENT_SIZE).limit(CONTENT_SIZE)
     user_list = [user for user in users]
     data = {"user_list" : user_list, "start_page" : start_page, "page_list" : page_list, "cur_page" : cur_page }
-
-    print("total_page", total_page)
-    print("cur_page", cur_page)
-    print("page_list", page_list)
-    print("start_page", start_page)
-
 
     return render_template('list.html', data=data)
 

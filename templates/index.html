@@ -17,15 +17,11 @@
         <div class="col-12 col-md-6">
             <div id="carouselExampleAutoplaying" class="carousel slide " data-bs-ride="carousel">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="../static/assat/dog.jpg" class="d-block w-100" alt="Dog">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="../static/assat/dog2.jpg" class="d-block w-100" alt="Dog">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="../static/assat/peng.jpg" class="d-block w-100" alt="Dog">
-                    </div>
+                    {% for user in data %}
+                        <a href="" class="carousel-item{% if loop.first %} active{% endif %}">
+                            <img src="../static/profile/{{ user.user_profile }}" class="d-block w-100" alt="{{ user.user_name }}">
+                        </a>
+                    {% endfor %}
                 </div>
             </div>
         </div>
