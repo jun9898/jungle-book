@@ -82,7 +82,7 @@ def profile(token):
     check_mypage = False
     user_id = request.args.get("user_id")
     user = db.jungle.find_one({"user_id": user_id}, {
-                              "_id": 0, "user_id": 1, "user_profile": 1})
+                              "_id": 0, "user_id": 1, "user_profile": 1, "user_name": 1 })
     if token == user_id:
         check_mypage = True
 

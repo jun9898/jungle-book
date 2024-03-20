@@ -81,9 +81,26 @@
     border-color: #444 !important;
 }
 
+.profile_img_container {
+    max-width: 450px;
+    max-height: 450px;
+    width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+    height: 100%; /* 부모 요소의 높이를 100%로 설정 */
+    overflow: hidden; /* 넘치는 이미지 부분을 숨기기 위해 사용 */
+    border-radius: 30px;
+}
+
+.profile_img_container img {
+    width: 100%; /* 이미지의 너비를 부모 요소에 맞게 100%로 설정 */
+    height: auto; /* 이미지의 높이를 자동으로 조정하여 비율 유지 */
+    display: block; /* 이미지를 블록 요소로 설정하여 인라인 요소의 공간을 없앰 */
+}
+
 .profile{
-    display: flex;
-    justify-content: space-between;
+    display: flex; /* Flexbox 사용 */
+    justify-content: center; /* 가로 정렬을 가운데로 */
+    align-items: center; /* 세로 정렬을 가운데로 */
+    flex-direction: column; /* 아이템을 세로로 정렬 */
 }
 
 #profile_img {
@@ -139,8 +156,8 @@
 }
 
 .input-background {
-    background-color: rgb(54, 62, 59);
-    max-width: 800px;
+    background-color: rgba(205, 205, 205, 0.2);
+    min-width: 800px;
     min-height: 90px;
     margin: 0 auto;
     border-radius: 40px;
@@ -166,7 +183,6 @@
 }
 
 .input-group > .btn {
-    width: 0 auto;
     background-color: #00d67a;
     font-weight: 600;
     color: white;
@@ -186,4 +202,31 @@
     font-size: 1rem;
     font-weight: 800;
     color: white;
+}
+
+.comments_container {
+    padding: 50px;
+    background-color: rgba(205, 205, 205, 0.2);
+    width: 100%;
+    max-width: 800px;
+    border-radius: 40px;
+}
+
+.profile_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user_profile_info {
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    max-width: 200px;
+    width: 100%;
+    margin-top: 25px;
+    padding: 7px 13px 7px 13px;
+    background-color: rgba(205, 205, 205, 0.2);
 }

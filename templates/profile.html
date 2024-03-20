@@ -8,13 +8,10 @@
     {% include 'header.html' %}
 
     <script>
-        var user_profile = "{{ data.user.user_profile }}";
-        var user_id = "{{ data.user.user_id }}";
+        let user_id = "{{ data.user.user_id }}";
         let page = 1;
-        let count_comments = 0;
         $(document).ready(function () {
             $(".next-btn").show();
-            display_profile();
             next_page(page);
         })
 
@@ -29,11 +26,13 @@
                     page++;
                     console.log(response.data.comments)
                     const comments = response.data.comments
-                    if (comments) {
+                    if (comments.length !== 0) {
                         comments.map(content => {
                             const { comment, writter } = content;
                             display_comment_list(comment, writter);
                         })
+                    } else {
+                            display_empty_comment();
                     }
                     if (response.data.check_last_page) {
                         $(".next-btn").hide();
@@ -43,15 +42,18 @@
 
         }
 
-        function display_profile() {
-            $("#profile_img").attr("src", "../static/profile/" + user_profile);
-        }
-
         function display_comment_list(comment, writter) {
             let text = `<div class="d-flex justify-content-between align-items-center user_profile_container">
                         <div class="d-flex flex-row align-items-center">
                         <img class="user_profile_img" src="../static/profile/${writter.user_profile}" alt="작성자 이미지">
                         <span class="user_comments"> ${comment}</span ></div ></div >`
+            $("#comment_list").append(text);
+        }
+
+        function display_empty_comment() {
+            let text = `<div class="d-flex justify-content-center align-items-center user_profile_container" style="margin-bottom: 0px">
+                            <h3>아직 작성된 댓글이 없습니다.</h3>
+                        </div >`
             $("#comment_list").append(text);
         }
 
@@ -87,37 +89,42 @@
         </div>
         <div class="container text-center">
             <div class="row justify-content-center">
-                <div class="col-6 users_container p-5">
+                <div class="col-6 users_container p-5 profile_container">
                     <div class="profile_info">
-                        <div class="title">
-                            <span id="profile_title">프로필 사진</span>
-                            <span id="badge_title">나의 뱃지</span>
-                        </div>
-                        <!-- 프로필 -->
                         <div class="profile">
-                            <span id="profile">
-                                <img src="" alt="유저 프로필" id="profile_img">
-                            </span>
-                            <!-- 뱃지 -->
-                            <span id="badge">
-                                <img src="../static/assat/gold.png" alt="뱃지" id="badge_img">
-                            </span>
+                            <div class="profile_img_container">
+                                <img src="../static/profile/{{ data.user.user_profile }}" alt="유저 프로필">
+                            </div>
+                            <div class="user_profile_info">
+                                <div>
+                                    {{ data.user.user_name }}
+                                </div>
+                                <div>
+                                    메달
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {% if not data.check_mypage %}
                     <div id="input_box">
-                        <div class="input-background">
+                        <div class="input-background flex-column">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="answer"
-                                    onkeypress="if( event.keyCode == 13 ){enterKey();}">
+                                       onkeypress="if( event.keyCode == 13 ){enterKey();}">
                                 <button type="button" class="btn btn-outline-secondary" onclick="add_comment()">첫인상
                                     남기기</button>
                             </div>
                         </div>
                     </div>
                     {% endif %}
-                    <div id="comment_list">
+
+                    <div class="comments_container">
+                        <div id="comment_list">
+                        </div>
                     </div>
+
+
+
                     <div id="next">
                         <button type="button" class="next-btn" onclick="next_page()">더 보기</button>
                     </div>
