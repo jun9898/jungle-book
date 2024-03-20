@@ -5,7 +5,7 @@ div {
 
 img.label {
     max-width: 77%;
-    margin: 1% auto 0 auto;
+    margin: 3% auto 0 auto;
     display: block;;
 }
 
@@ -65,4 +65,15 @@ img.label {
 
 .set_image{
     text-align: center;
+}
+
+.etc_container {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+}
+
+.etc_font {
+    font-size: 13px;
+    color: #00d76a;
 }
