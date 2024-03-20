@@ -1,8 +1,7 @@
 <div align="center">
 <br/>
 크래프톤 정글 5기 7팀 <br/>
-개발기간 : 3/18 ~ 3/20
-<br/>
+개발기간 : 3/18 ~ 3/20 <br/>
 
 <img width="500px" src="https://github.com/jun9898/jungle_book/assets/129564528/9c0cc2fe-598b-4c05-83b0-0a708715566d" alt="정글북 이동하기"/>
 
