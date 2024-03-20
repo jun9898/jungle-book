@@ -1,6 +1,8 @@
 from functools import wraps
-from flask import request, render_template
+from flask import request, render_template, jsonify
 import jwt
+from flask_jwt_extended import unset_jwt_cookies
+
 from secret_key import SECRET_KEY
 
 def require_access_token(func):
@@ -14,6 +16,7 @@ def require_access_token(func):
             except jwt.ExpiredSignatureError:
                 # 토큰 만료 에러 처리
                 raise ValueError("토큰이 만료되었습니다. 다시 로그인해주세요")
+
             except jwt.InvalidTokenError:
                 # 유효하지 않은 토큰 에러 처리
                 raise ValueError("유효하지 않은 로그인. 다시 로그인해주세요.")
