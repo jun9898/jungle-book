@@ -75,15 +75,9 @@ def api_register():
 
     pw_hash = hashlib.sha256(user_pw.encode('utf-8')).hexdigest()
 
-    result = db.jungle.find_one({'user_id': user_id})
-
-    if result is None:
-        db.jungle.insert_one(
-            {"user_id": user_id, "user_pw": pw_hash, "user_name": user_name, "user_profile": uuid_filename})
-        return jsonify({"status": "success"})
-
-    # 회원가입 실패 로직
-    return jsonify({"status": "error", "errormsg": "User already exists"})
+    db.jungle.insert_one(
+        {"user_id": user_id, "user_pw": pw_hash, "user_name": user_name, "user_profile": uuid_filename})
+    return jsonify({"status": "success"})
 
 
 @app.route('/user-login', methods=['POST'])
