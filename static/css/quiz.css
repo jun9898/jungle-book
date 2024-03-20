@@ -63,13 +63,11 @@
 }
 
 #answerMessage{
+    border-radius: 10px;
     background-color: rgb(54, 62, 59);
     min-height: 100px;
     max-width: 800px;
     margin: 0 auto;
-    border-radius: 10px;
-    border: 10px solid #00d67a;
-    border-style: inset;
     font-size: 1.5rem;
     display: flex;
     justify-content: center;
