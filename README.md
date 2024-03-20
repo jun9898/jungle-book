@@ -64,7 +64,7 @@
     </tr>
     <tr>
         <td>
-            <img src="https://github.com/jun9898/jungle_book/assets/129564528/1bfee802-0614-41ee-b900-23cabb309f58"/>
+            <img src="https://github.com/jun9898/jungle_book/assets/129564528/4903da18-6302-47c0-af41-646cfcfd85f4"/>
         </td>
     </tr>
     <tr>
@@ -72,7 +72,7 @@
     </tr>
     <tr>
         <td>
-            <img src="https://github.com/jun9898/jungle_book/assets/129564528/0c8ab145-a670-49a0-b96a-8cff14ec340b">
+            <img src="https://github.com/jun9898/jungle_book/assets/129564528/ddb98e35-889f-4535-9742-b3e1bc851b1d">
         </td>
     </tr>
     <tr>
@@ -92,19 +92,19 @@
         </td>
     </tr>
     <tr>
-        <td>친구 첫인상 남기기</td>
+        <td>친구 첫인상 남기기 (친구가 푼 퀴즈 탑 레이팅)</td>
     </tr>
     <tr>
         <td>
-            <img src="https://github.com/jun9898/jungle_book/assets/129564528/0c8ab145-a670-49a0-b96a-8cff14ec340b">
+            <img src="https://github.com/jun9898/jungle_book/assets/129564528/66041d39-f79d-4599-9152-fb6384e63517">
         </td>
     </tr>
     <tr>
-        <td>친구 얼굴 맞추기 퀴즈</td>
+        <td>친구 얼굴 맞추기 퀴즈 (오답시 친구가 등록한 코멘트 확인)</td>
     </tr>
     <tr>
         <td>
-            <img src="https://github.com/jun9898/jungle_book/assets/129564528/5addb08e-8cbf-4f01-9632-5cb575fff10f">
+            <img src="https://github.com/jun9898/jungle_book/assets/129564528/611d27d4-a511-4467-93f2-0943360a0e18">
         </td>
     </tr>
 </table>
