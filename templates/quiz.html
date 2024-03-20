@@ -24,7 +24,6 @@
                         console.log(user[i + 1]);
                     }
                     max_count = response.users.length;
-                    localStorage.setItem("max_count", max_count);
                     display_user_image();
                     display_count_num();
                 }
@@ -55,8 +54,7 @@
             console.log("다음 유저 출력");
             $(".bi-caret-right-fill").hide();
             if (count_num >= max_count) {
-                localStorage.setItem("score", score);
-                window.location.href = '/result';
+                window.location.href = '/result?score=' + score + "&max_count=" + max_count;
             } else {
                 count_num++;
             }
@@ -83,9 +81,6 @@
             answer_check()
         }
 
-        function change_css() {
-            $(".input-group").attr("style", "height:200px")
-        }
     </script>
 
 </head>

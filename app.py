@@ -110,7 +110,6 @@ def logout():
 def get_user(token):
     find_user_id = request.args.get("user_id")
     page = request.args.get("page", type=int)
-    print(page)
 
     # 각 페이지의 첫 번째 인덱스 계산
     skip_count = (page - 1) * CONTENT_SIZE
@@ -181,13 +180,6 @@ def quiz(token):
     random_users = db.jungle.aggregate(query)
     users = [user for user in random_users]
     return jsonify({"result": "success", "users": users})
-
-
-@app.route('/score', methods=['POST'])
-@require_access_token
-def score(token):
-    score = request.form['score']
-    return jsonify({"result": "success", "score": score})
 
 
 @app.errorhandler(ValueError)
