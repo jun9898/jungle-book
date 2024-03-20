@@ -1,38 +1,89 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>sign_in</title>
-        <meta charset="utf-8">
-        {% include 'login_header.html' %}
-        <link rel="stylesheet" href="/static/css/sign_in.css">
-    </head>
+<head>
+    <meta charset="utf-8">
+    {% include 'login_header.html' %}
+    <link rel="stylesheet" href="/static/css/sign_in.css">
 
-    <body>
+</head>
 
-        <div>
-            <img class="label" onclick="location.href='/'" src="./static/assat/jungle_book.png"><br>
-        </div>
+<body>
 
-        <div>
-            <div class="posting-box">
-                <h1 style="text-align:center; font-weight : bold;">Login</h1>
-    
-                <hr style="border: solid 3px black;">
-                
+    <div>
+        <img class="label" src="./static/assat/jungle_book.png"><br>
+    </div>
+
+    <div>
+
+    </div>
+    <div style="padding: 20px;">
+        <div class="posting-box">
+            <h1 style="text-align:center; font-weight : bold;">Join</h1>
+
+            <hr style="border: solid 1px black; width: 70%; margin-left: auto; margin-right: auto;"><br>
+
+            <form>
                 <div class="input-box">
-                    <h3 style="font-weight: bold;">ID</h3>
-                    <input style="width:400px;height:40px;" type="ID" class="form-ID"><br><br>
-                    <h3 style="font-weight: bold;">PASSWORD</h3>
-                    <input style="width:400px;height:40px;" type="password" class="form-ID"><br>
-                    
+                    <span class="set_image" style="margin-left: 25%;">
+                        <label for="user_profile">
+                            <img src="../static/assat/default_profile.jpeg" alt="대체 이미지" id="sign_image">
+                        </label>
+                        <input type="file" name="user_profile" id="user_profile" onchange="handleImageUpload(event)">
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        <script>
+                            function handleImageUpload(event) {
+                                const imageFile = event.target.files[0];
+
+
+
+                                const formData = new FormData();
+                                formData.append('image', imageFile);
+
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/upload_image",  // 변경된 URL
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (response) {
+                                        if (response.result === 'success') {
+                                            const newImageUrl = response.image_url;
+                                            const signImage = document.getElementById('sign_image');
+
+
+                                            if (signImage.src !== '') {
+                                                URL.revokeObjectURL(signImage.src);
+                                                signImage.src = '';
+                                            }
+
+                                            signImage.setAttribute('src', newImageUrl);
+                                        } else {
+                                            console.error(response.message);
+                                        }
+                                    },
+                                    error: function (xhr, textStatus, errorThrown) {
+                                        console.error('이미지 업로드 실패:', errorThrown);
+                                    }
+                                });
+                            }
+
+                        </script>
+                    </span>
+
+                    <h3 style="font-weight: bold; font-size: 23px;">ID</h3>
+                    <input style="width:400px;height:40px;" type="ID" class="form-ID"><br>
+                    <h3 style="font-weight: bold; font-size: 23px;">PASSWORD</h3>
+                    <input style="width:400px;height:40px;" type="password" class="form-PW"><br>
+                    <h3 style="font-weight: bold; font-size: 23px;">NAME</h3>
+                    <input style="width:400px;height:40px;" class="form-NAME"><br>
+
                     <div class="btn">
-                        <button class="btn-deco" style="line-height: 10px;">Login</button><br>
-                        <a href="#"  style="font-size: 20px;color: black">sing_in</a>
+                        <button class="btn-deco" style="line-height: 10px; color: white">Sign In</button><br>
                     </div>
-                    
                 </div>
-            </div>
+            </form>
         </div>
-        
-    </body>
+    </div>
+
+</body>
 </html>
