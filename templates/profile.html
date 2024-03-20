@@ -32,7 +32,7 @@
                             display_comment_list(comment, writter);
                         })
                     } else {
-                            display_empty_comment();
+                        display_empty_comment();
                     }
                     if (response.data.check_last_page) {
                         $(".next-btn").hide();
@@ -93,9 +93,9 @@
         <div class="row justify-content-center">
             <a href="/" class="logo">
                 {% if data.check_mypage %}
-                    <img src="../static/assat/mypage.png" class="img-fluid logo" alt="mypage" id="mypage">
+                <img src="../static/assat/mypage.png" class="img-fluid logo" alt="mypage" id="mypage">
                 {% else %}
-                    <img src="../static/assat/profile.png" class="img-fluid logo" alt="mypage" id="mypage">
+                <img src="../static/assat/profile.png" class="img-fluid logo" alt="mypage" id="mypage">
                 {% endif %}
             </a>
         </div>
@@ -113,7 +113,19 @@
                                     {{ data.user.user_name }}
                                 </div>
                                 <div>
-                                    메달
+                                    {% if not data.score %}
+                                    <img src="../static/assat/bronze.png" class="img-fluid logo" alt="bronze"
+                                        id="bronze">
+                                    {% elif (data.score > 0) and (data.score < 5) %} <img
+                                        src="../static/assat/bronze.png" class="img-fluid logo" alt="bronze"
+                                        id="bronze">
+                                        {% elif (data.score >= 5) and (data.score < 8) %} <img
+                                            src="../static/assat/silver.png" class="img-fluid logo" alt="silver"
+                                            id="silver">
+                                            {% else %}
+                                            <img src="../static/assat/gold.png" class="img-fluid logo" alt="gold"
+                                                id="gold">
+                                            {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -122,8 +134,10 @@
                     <div id="input_box">
                         <div class="input-background flex-column">
                             <div class="input-group">
-                                <input type="text" style="border-radius: 15px 0px 0px 15px" class="form-control" id="answer" onkeypress="handleKeyPress(event)">
-                                <button type="button" style="border-radius: 0px 15px 15px 0px" class="btn btn-outline-secondary" onclick="add_comment()">첫인상 남기기</button>
+                                <input type="text" style="border-radius: 15px 0px 0px 15px" class="form-control"
+                                    id="answer" onkeypress="handleKeyPress(event)">
+                                <button type="button" style="border-radius: 0px 15px 15px 0px"
+                                    class="btn btn-outline-secondary" onclick="add_comment()">첫인상 남기기</button>
 
                                 <script>
                                     function handleKeyPress(event) {
