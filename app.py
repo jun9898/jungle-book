@@ -1,3 +1,5 @@
+import math
+from decorator import require_access_token
 import hashlib
 import os
 import uuid
@@ -24,6 +26,7 @@ app.config['JWT_SECRET_KEY'] = SECRET_KEY
 app.register_blueprint(bp)
 jwt = JWTManager(app)
 
+CONTENT_SIZE = 5
 PAGE_LIMIT = 10
 
 app.config['UPLOAD_FOLDER'] = 'static/assat'
@@ -67,7 +70,8 @@ def api_register():
     if file.filename == "":
         return jsonify({"error": "No selected file"})
     file_extension = file.filename.split('.')[-1]  # 파일 확장자 추출
-    uuid_filename = str(uuid.uuid4()) + '.' + file_extension  # UUID를 포함한 새로운 파일 이름 생성
+    uuid_filename = str(uuid.uuid4()) + '.' + \
+        file_extension  # UUID를 포함한 새로운 파일 이름 생성
 
     # 파일 저장 경로 설정
     save_path = './static/profile/' + uuid_filename
@@ -112,10 +116,36 @@ def logout():
 @app.route('/get_user', methods=['GET'])
 @require_access_token
 def get_user(token):
-    user_id = token
-    user = db.jungle.find_one({'user_id': user_id},
-                              {"_id": 0, "user_id": 1, "user_profile": 1, "comments": 1})
-    return jsonify({"result": "success", "user": user})
+    find_user_id = request.args.get("user_id")
+    page = request.args.get("page", type=int)
+    print(page)
+
+    # 각 페이지의 첫 번째 인덱스 계산
+    skip_count = (page - 1) * CONTENT_SIZE
+
+    # 사용자 데이터 조회
+    user = db.jungle.find_one({'user_id': find_user_id}, {
+                              "_id": 0, "comments": 1})
+
+    # 댓글 데이터 조회
+    comments = user.get("comments", [])
+    comments_count = len(comments)
+
+    # 페이지에 맞게 댓글 데이터를 자르기
+    start_index = skip_count
+    end_index = min(skip_count + CONTENT_SIZE, comments_count)
+    paginated_comments = comments[start_index:end_index]
+
+    # 페이징 여부 확인
+    last_page = math.ceil(comments_count / CONTENT_SIZE)
+    check_last_page = page >= last_page
+
+    # 페이징된 사용자 데이터 및 페이징 정보 반환
+
+    data = {"check_last_page": check_last_page,
+            "comments": list(paginated_comments)}
+
+    return jsonify({"result": "success", "data": data})
 
 
 @app.route('/add_comment', methods=['POST'])
@@ -138,6 +168,12 @@ def add_comment(token):
     )
 
     return jsonify({"result": "success", "comment": comment})
+
+
+@app.errorhandler(ValueError)
+def handle_value_error(error):
+    # 에러를 받아서 에러 페이지를 렌더링합니다.
+    return render_template('error.html', error=error), 400
 
 
 @app.route('/random_users', methods=['GET'])

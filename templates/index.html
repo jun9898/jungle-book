@@ -18,7 +18,7 @@
             <div id="carouselExampleAutoplaying" class="carousel slide " data-bs-ride="carousel">
                 <div class="carousel-inner">
                     {% for user in data %}
-                    <a href="/profile/{{ user.user_id }}" class="carousel-item{% if loop.first %} active{% endif %}">
+                    <a href="/profile?user_id={{ user.user_id }}" class="carousel-item{% if loop.first %} active{% endif %}">
                         <img src="../static/profile/{{ user.user_profile }}" class="d-block w-100" alt="{{ user.user_name }}">
                     </a>
                     {% endfor %}

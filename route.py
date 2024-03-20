@@ -9,6 +9,7 @@ bp = Blueprint('routes', __name__)
 CONTENT_SIZE = 6
 PAGE_SIZE = 5
 
+
 @bp.route('/')
 def home():
     query = [
@@ -18,16 +19,18 @@ def home():
     ]
     random_users = db.jungle.aggregate(query)
     users = [user for user in random_users]
-
     return render_template('index.html', data=users)
+
 
 @bp.route('/login')
 def login():
     return render_template('login.html', data="test")
-    
+
+
 @bp.route('/sign_in')
 def sign_in():
     return render_template('sign_in.html')
+
 
 @bp.route('/list')
 @require_access_token
@@ -47,9 +50,16 @@ def list(decode_token):
     else:
         page_list.extend(i for i in range(start_page, total_page+1))
 
-    users = db.jungle.find({}, {"_id": 0, "user_pw": 0}).sort("user_name", 1).skip((cur_page-1) * CONTENT_SIZE).limit(CONTENT_SIZE)
+    users = db.jungle.find({}, {"_id": 0, "user_pw": 0}).skip(
+        (cur_page-1) * CONTENT_SIZE).limit(CONTENT_SIZE)
     user_list = [user for user in users]
-    data = {"user_list" : user_list, "start_page" : start_page, "page_list" : page_list, "cur_page" : cur_page }
+    data = {"user_list": user_list, "start_page": start_page,
+            "page_list": page_list, "cur_page": cur_page}
+
+    print("total_page", total_page)
+    print("cur_page", cur_page)
+    print("page_list", page_list)
+    print("start_page", start_page)
 
     return render_template('list.html', data=data)
 
@@ -59,10 +69,25 @@ def list(decode_token):
 def quiz(token):
     return render_template('quiz.html')
 
+
 @bp.route('/result')
-def result():
+@require_access_token
+def result(tokens):
     return render_template('result.html')
 
-@bp.route('/mypage')
-def mypage():
-    return render_template('mypage.html')
+
+@bp.route('/profile')
+@require_access_token
+def profile(token):
+    global check_mypage
+    check_mypage = False
+    user_id = request.args.get("user_id")
+    user = db.jungle.find_one({"user_id": user_id}, {
+                              "_id": 0, "user_id": 1, "user_profile": 1})
+    if token == user_id:
+        check_mypage = True
+
+    if user:
+        # 사용자 데이터가 존재하는 경우
+        data = {"user": user, "check_mypage": check_mypage}
+        return render_template('profile.html', data=data)
