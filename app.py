@@ -2,6 +2,7 @@ import hashlib
 import os
 import uuid
 
+from bson import ObjectId
 from flask import Flask, jsonify, request, render_template
 from flask_jwt_extended import JWTManager, create_refresh_token, create_access_token, get_jwt_identity, jwt_required, \
     set_access_cookies, set_refresh_cookies, unset_jwt_cookies
@@ -51,14 +52,20 @@ def upload_image():
 def api_register():
 
     user_id = request.form['user_id']
+    user = db.jungle.find_one({'user_id': user_id})
+
+    if user:
+        return jsonify({"status": "error", "message": "중복된 ID입니다."})
+
+
     user_pw = request.form['user_pw']
     user_name = request.form['user_name']
 
     if 'user_profile' not in request.files:
-        return jsonify({"result": "No file part"})
+        return jsonify({"error": "No file part"})
     file = request.files['user_profile']
     if file.filename == "":
-        return jsonify({"result": "No selected file"})
+        return jsonify({"error": "No selected file"})
     file_extension = file.filename.split('.')[-1]  # 파일 확장자 추출
     uuid_filename = str(uuid.uuid4()) + '.' + file_extension  # UUID를 포함한 새로운 파일 이름 생성
 

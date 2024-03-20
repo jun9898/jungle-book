@@ -42,11 +42,15 @@
         }
 
         function sign_in() {
-            //alert("누르긴했음");
             var id = document.querySelector(".form-ID").value;
             var pw = document.querySelector(".form-PW").value;
             var name = document.querySelector(".form-NAME").value;
             var file = document.querySelector("#user_profile").files[0];
+
+            if (id === "" || pw === "" || name === "" || !file) {
+                alert("모든 필드를 작성해주세요.");
+                return; // 데이터가 비어 있으면 함수 종료
+            }
 
             const formData = new FormData();
             formData.append('user_id', id);
@@ -54,7 +58,6 @@
             formData.append('user_name', name);
             formData.append('user_profile', file);
 
-            alert("누르긴했음2");
             $.ajax({
                 type: "POST",
                 url: "/sign_in",  // 변경된 URL
@@ -63,11 +66,17 @@
                 contentType: false,
                 success: function (response) {
                     console.log(response.status);
-                    if (response.status === 'success') { alert("성공"); }
-                    else alert("실패");
+                    if (response.status === 'success') {
+                        console.log("success")
+                        alert("회원가입 성공!");
+                        window.location.href = "/login"
+                    }
+                    else {
+                        alert("회원가입 실패! " + response.message);
+                    }
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    alert("error");
+                    alert("잠시 후 다시 시도해주세요.");
                 }
             });
         }
@@ -79,9 +88,9 @@
 
 <body>
 
-    <div>
+    <a href="/">
         <img class="label" src="./static/assat/jungle_book.png"><br>
-    </div>
+    </a>
 
     <div>
 
