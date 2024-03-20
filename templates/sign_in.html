@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     {% include 'login_header.html' %}
@@ -47,7 +48,7 @@
             var pw = document.querySelector(".form-PW").value;
             var name = document.querySelector(".form-NAME").value;
             var file = document.querySelector("#user_profile").files[0];
-
+            var user_message = document.querySelector(".user_message").value;
             if (id === "" || pw === "" || name === "" || !file) {
                 alert("모든 필드를 작성해주세요.");
                 return; // 데이터가 비어 있으면 함수 종료
@@ -58,16 +59,20 @@
             document.querySelector(".form-PW").value = "";
             document.querySelector(".form-NAME").value = "";
             document.querySelector("#user_profile").value = "";
+            document.querySelector(".user_message").value = "";
+
 
             const formData = new FormData();
             formData.append('user_id', id);
             formData.append('user_pw', pw);
             formData.append('user_name', name);
             formData.append('user_profile', file);
+            formData.append('user_message', user_message);
+
 
             $.ajax({
                 type: "POST",
-                url: "/sign_in",  // 변경된 URL
+                url: "/user_sign_in",  // 변경된 URL
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -126,8 +131,9 @@
                     <input style="width:400px;height:40px;margin-bottom: 3%;" class="form-NAME"><br>
 
                     <h3 style="font-weight: bold; font-size: 14px;">ETC.</h3>
-                    <input style="width:400px;height:40px;" class="to_other_comment" placeholder="나의 이름을 아직도 못 외운 친구들을 위한 한 마디"><br>
-                    
+                    <input style="width:400px;height:40px;" class="user_message"
+                        placeholder="나의 이름을 아직도 못 외운 친구들을 위한 한 마디"><br>
+
                     <div class="btn">
                         <button class="btn-deco" style="line-height: 10px; color: white" onclick="sign_in()">Sign
                             In</button><br>
