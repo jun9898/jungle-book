@@ -4,17 +4,39 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/static/css/error.css">
+    {% include 'login_header.html' %}
+    <script>
+        const logout = () => {
+            $.ajax({
+                type: 'POST', // POST 요청
+                url: 'logout', // 로그아웃 URL
+                success: function(response) {
+                    // 로그아웃 성공 시 실행할 코드
+                    console.log('로그아웃 성공');
+                    window.location.href='/'
+                    // 여기에 로그아웃 성공 시 해야할 작업을 추가하세요
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    // 요청 실패 시 실행할 코드
+                    console.error('로그아웃 실패');
+                    // 여기에 요청 실패 시 해야할 작업을 추가하세요
+                }
+            });
+        }
+    </script>
 </head>
 <body>
 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 50px; text-align: center;">
-    <div class="posting-box" style="display: inline-block; text-align: center;">
+    <div class="posting-box" style="display: flex; flex-direction: column; text-align: center; align-items: center; justify-content: center;">
         <h1 style="font-weight: bold;">ERROR!</h1>
 
         <hr style="border: solid 1px #000000; width: 700px; margin: auto;"><br>
         <h3>
             {{ error }}
         </h3>
-        <button class="btn btn-primary error-btn" onclick="location.href='/'">메인으로</button>
+        <button class="m-3 btn btn-primary error-btn" onclick="logout()" style="display: flex; align-items: center; justify-content: center;">
+            메인으로
+        </button>
     </div>
 </div>
 
