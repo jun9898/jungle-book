@@ -9,21 +9,26 @@
 <link rel="stylesheet" href="/static/css/index.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<div style="text-align: left; flex-direction: column; margin: 10px">
-    <span><a href="/sign_in" style="font-size: 12px; text-decoration: none; color: white;">github</a></span>
+<div style="display: flex; flex-direction: row; justify-content: space-between">
+    <div style="margin: 10px">
+        <span><a href="https://github.com/jun9898/jungle_book" style="margin: 10px;font-size: 12px; text-decoration: none; color: white;">github</a></span>
+    </div>
+
+    <div id="loginLinks" style="text-align: right; flex-direction: column; margin: 10px">
+        <span><a href="/login" style="font-size: 12px; text-decoration: none; color: white;">로그인</a></span>
+        <span style="font-size: 12px">/</span>
+        <span><a href="/sign_in" style="font-size: 12px; text-decoration: none; color: white;">회원가입</a></span>
+    </div>
+
+    <div id="logoutLinks" style="text-align: right; flex-direction: column; margin: 10px; display: none;">
+        <span><a href="/mypage" style="font-size: 12px; text-decoration: none; color: white;">마이페이지</a></span>
+        <span style="font-size: 12px">/</span>
+        <span><a href="#" id="logoutBtn" style="font-size: 12px; text-decoration: none; color: white;">로그아웃</a></span>
+    </div>
+
 </div>
 
-<div id="loginLinks" style="text-align: right; flex-direction: column; margin: 10px">
-    <span><a href="/login" style="font-size: 12px; text-decoration: none; color: white;">로그인</a></span>
-    <span style="font-size: 12px">/</span>
-    <span><a href="/sign_in" style="font-size: 12px; text-decoration: none; color: white;">회원가입</a></span>
-</div>
 
-<div id="logoutLinks" style="text-align: right; flex-direction: column; margin: 10px; display: none;">
-    <span><a href="/mypage" style="font-size: 12px; text-decoration: none; color: white;">마이페이지</a></span>
-    <span style="font-size: 12px">/</span>
-    <span><a href="#" id="logoutBtn" style="font-size: 12px; text-decoration: none; color: white;">로그아웃</a></span>
-</div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
