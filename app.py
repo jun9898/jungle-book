@@ -1,3 +1,4 @@
+from decorator import require_access_token
 import hashlib
 import uuid
 
@@ -61,6 +62,7 @@ def login():
 
     if result is not None:
         access_token = create_access_token(identity=user_id)
+        print(access_token)
         refresh_token = create_refresh_token(identity=user_id)
         resp = jsonify({'login': True})
         set_access_cookies(resp, access_token)
@@ -80,18 +82,19 @@ def logout():
 
 
 @app.route('/get_user', methods=['GET'])
-@jwt_required()
-def get_user():
-    user_id = request.form['user_id']
-    user = db.jungle.find_one({'user_id': user_id}, {"_id": 0})
+@require_access_token
+def get_user(token):
+    user_id = token
+    user = db.jungle.find_one({'user_id': user_id},
+                              {"_id": 0, "user_id": 1, "user_profile": 1, "comments": 1})
     return jsonify({"result": "success", "user": user})
 
 
 @app.route('/add_comment', methods=['POST'])
-@jwt_required()
-def add_comment():
+@require_access_token
+def add_comment(token):
     user_id = request.form['user_id']
-    login_user = get_jwt_identity()
+    login_user = token
     login_user_info = db.jungle.find_one(
         {'user_id': login_user}, {'comments': 0, '_id': 0, 'user_pw': 0})
     comment_text = request.form['comment']
@@ -109,9 +112,14 @@ def add_comment():
     return jsonify({"result": "success", "comment": comment})
 
 
+@app.errorhandler(ValueError)
+def handle_value_error(error):
+    # 에러를 받아서 에러 페이지를 렌더링합니다.
+    return render_template('error.html', error=error), 400
+
 @app.route('/random_users', methods=['GET'])
-# @jwt_required()
-def quiz():
+@require_access_token
+def quiz(token):
     query = [
         {'$sample': {'size': 10}},
         {'$project': {'_id': 0, 'user_id': 1, 'user_name': 1,
@@ -123,8 +131,8 @@ def quiz():
 
 
 @app.route('/score', methods=['POST'])
-# @jwt_required()
-def score():
+@require_access_token
+def score(token):
     score = request.form['score']
     return jsonify({"result": "success", "score": score})
 

@@ -62,3 +62,7 @@ def quiz():
 @bp.route('/result')
 def result():
     return render_template('result.html')
+
+@bp.route('/mypage')
+def mypage():
+    return render_template('mypage.html')
