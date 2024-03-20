@@ -52,6 +52,12 @@
                 return; // 데이터가 비어 있으면 함수 종료
             }
 
+            // 입력 필드 초기화
+            document.querySelector(".form-ID").value = "";
+            document.querySelector(".form-PW").value = "";
+            document.querySelector(".form-NAME").value = "";
+            document.querySelector("#user_profile").value = "";
+
             const formData = new FormData();
             formData.append('user_id', id);
             formData.append('user_pw', pw);
