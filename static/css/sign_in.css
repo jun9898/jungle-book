@@ -5,14 +5,14 @@ div {
 
 img.label {
     max-width: 77%;
-    margin: 3% auto 0 auto;
+    margin: 1% auto 0 auto;
     display: block;;
 }
 
 .posting-box {
     min-height: 75vh;
     max-width:  75vh;
-    margin: 0 auto 0 auto;
+    margin: -1% auto 0 auto;
     border: 2px solid black;
     border-radius: 3px;
     padding: 50px;
@@ -33,7 +33,7 @@ img.label {
 
 .btn-deco {
     align-items:center;
-
+    margin-top: -30%;
     width: 200px;
     height: 40px;
 
