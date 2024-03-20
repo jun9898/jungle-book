@@ -107,38 +107,36 @@
             <h1 style="text-align:center; font-weight : bold; margin-top: -3%;">Join</h1>
 
             <hr style="border: solid 1px black; width: 70%; margin-left: auto; margin-right: auto;"><br>
+            <div class="input-box">
+                <span class="set_image" style="margin-left: 25%;">
+                    <label for="user_profile">
+                        <img src="../static/assat/default_profile.jpeg" alt="대체 이미지" id="sign_image">
+                    </label>
+                    <input type="file" name="user_profile" id="user_profile" onchange="handleImageUpload(event)">
+                </span>
 
-            <form>
-                <div class="input-box">
-                    <span class="set_image" style="margin-left: 25%;">
-                        <label for="user_profile">
-                            <img src="../static/assat/default_profile.jpeg" alt="대체 이미지" id="sign_image">
-                        </label>
-                        <input type="file" name="user_profile" id="user_profile" onchange="handleImageUpload(event)">
-                    </span>
+                <h3 style="font-weight: bold; font-size: 14px;">ID</h3>
+                <input style="width:400px;height:40px; margin-bottom: 3%;" type="ID" class="form-ID"><br>
 
-                    <h3 style="font-weight: bold; font-size: 14px;">ID</h3>
-                    <input style="width:400px;height:40px; margin-bottom: 3%;" type="ID" class="form-ID"><br>
+                <h3 style="font-weight: bold; font-size: 14px;">PASSWORD</h3>
+                <input style="width:400px;height:40px;margin-bottom: 3%;" type="password" class="form-PW"><br>
 
-                    <h3 style="font-weight: bold; font-size: 14px;">PASSWORD</h3>
-                    <input style="width:400px;height:40px;margin-bottom: 3%;" type="password" class="form-PW"><br>
+                <h3 style="font-weight: bold; font-size: 14px;">NAME</h3>
+                <input style="width:400px;height:40px;margin-bottom: 3%;" class="form-NAME"><br>
 
-                    <h3 style="font-weight: bold; font-size: 14px;">NAME</h3>
-                    <input style="width:400px;height:40px;margin-bottom: 3%;" class="form-NAME"><br>
-
-                    <div class="etc_container">
-                        <h3  style="font-weight: bold; font-size: 14px;">ETC.</h3>
-                        <span class="etc_font">&nbsp&nbsp(필수X)</span>
-                    </div>
-
-                    <input style="width:400px;height:40px;" class="to_other_comment" placeholder="나의 이름을 아직도 못 외운 친구들을 위한 한 마디"><br>
-                    
-                    <div class="btn" >
-                        <button class="btn-deco" style="line-height: 10px; color: white;" onclick="sign_in()">Sign
-                            In</button><br>
-                    </div>
+                <div class="etc_container">
+                    <h3 style="font-weight: bold; font-size: 14px;">ETC.</h3>
+                    <span class="etc_font">&nbsp&nbsp(필수X)</span>
                 </div>
-            </form>
+
+                <input style="width:400px;height:40px;" class="user_message"
+                    placeholder="나의 이름을 아직도 못 외운 친구들을 위한 한 마디"><br>
+
+                <div class="btn">
+                    <button class="btn-deco" style="line-height: 10px; color: white;" onclick="sign_in()">Sign
+                        In</button><br>
+                </div>
+            </div>
         </div>
     </div>
 
