@@ -19,6 +19,6 @@ def require_access_token(func):
                 raise ValueError("유효하지 않은 로그인. 다시 로그인해주세요.")
         else:
             # 토큰이 없는 경우 에러를 던집니다.
-            raise ValueError("로그인 정보가 존재하지 않습니다.")
+            raise ValueError("로그인한 유저만 사용 가능한 서비스 입니다.")
 
     return wrapper
