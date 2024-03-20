@@ -5,6 +5,76 @@
     {% include 'login_header.html' %}
     <link rel="stylesheet" href="/static/css/sign_in.css">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const formData = new FormData();
+        function handleImageUpload(event) {
+            const imageFile = event.target.files[0];
+            formData.append('user_profile', imageFile);
+
+            $.ajax({
+                type: "POST",
+                url: "/upload_image",  // 변경된 URL
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.result === 'success') {
+                        const newImageUrl = response.image_url;
+                        const signImage = document.getElementById('sign_image');
+
+
+                        if (signImage.src !== '') {
+                            URL.revokeObjectURL(signImage.src);
+                            signImage.src = '';
+                        }
+
+                        signImage.setAttribute('src', newImageUrl);
+                    } else {
+                        console.error(response.message);
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error('이미지 업로드 실패:', errorThrown);
+                }
+            });
+
+        }
+
+        function sign_in() {
+            //alert("누르긴했음");
+            var id = document.querySelector(".form-ID").value;
+            var pw = document.querySelector(".form-PW").value;
+            var name = document.querySelector(".form-NAME").value;
+            var file = document.querySelector("#user_profile").files[0];
+
+            const formData = new FormData();
+            formData.append('user_id', id);
+            formData.append('user_pw', pw);
+            formData.append('user_name', name);
+            formData.append('user_profile', file);
+
+            alert("누르긴했음2");
+            $.ajax({
+                type: "POST",
+                url: "/sign_in",  // 변경된 URL
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response.status);
+                    if (response.status === 'success') { alert("성공"); }
+                    else alert("실패");
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert("error");
+                }
+            });
+        }
+
+    </script>
+
+
 </head>
 
 <body>
@@ -29,45 +99,7 @@
                             <img src="../static/assat/default_profile.jpeg" alt="대체 이미지" id="sign_image">
                         </label>
                         <input type="file" name="user_profile" id="user_profile" onchange="handleImageUpload(event)">
-                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                        <script>
-                            function handleImageUpload(event) {
-                                const imageFile = event.target.files[0];
 
-
-
-                                const formData = new FormData();
-                                formData.append('image', imageFile);
-
-                                $.ajax({
-                                    type: "POST",
-                                    url: "/upload_image",  // 변경된 URL
-                                    data: formData,
-                                    processData: false,
-                                    contentType: false,
-                                    success: function (response) {
-                                        if (response.result === 'success') {
-                                            const newImageUrl = response.image_url;
-                                            const signImage = document.getElementById('sign_image');
-
-
-                                            if (signImage.src !== '') {
-                                                URL.revokeObjectURL(signImage.src);
-                                                signImage.src = '';
-                                            }
-
-                                            signImage.setAttribute('src', newImageUrl);
-                                        } else {
-                                            console.error(response.message);
-                                        }
-                                    },
-                                    error: function (xhr, textStatus, errorThrown) {
-                                        console.error('이미지 업로드 실패:', errorThrown);
-                                    }
-                                });
-                            }
-
-                        </script>
                     </span>
 
                     <h3 style="font-weight: bold; font-size: 23px;">ID</h3>
@@ -78,7 +110,8 @@
                     <input style="width:400px;height:40px;" class="form-NAME"><br>
 
                     <div class="btn">
-                        <button class="btn-deco" style="line-height: 10px; color: white">Sign In</button><br>
+                        <button class="btn-deco" style="line-height: 10px; color: white" onclick="sign_in()">Sign
+                            In</button><br>
                     </div>
                 </div>
             </form>
@@ -86,4 +119,5 @@
     </div>
 
 </body>
+
 </html>
