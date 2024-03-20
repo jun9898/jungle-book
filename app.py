@@ -54,6 +54,7 @@ def api_register():
 
     user_pw = request.form['user_pw']
     user_name = request.form['user_name']
+    user_message = request.form['user_message']
 
     if 'user_profile' not in request.files:
         return jsonify({"error": "No file part"})
@@ -70,8 +71,13 @@ def api_register():
 
     pw_hash = hashlib.sha256(user_pw.encode('utf-8')).hexdigest()
 
-    db.jungle.insert_one(
-        {"user_id": user_id, "user_pw": pw_hash, "user_name": user_name, "user_profile": uuid_filename})
+    db.jungle.insert_one({
+        "user_id": user_id,
+        "user_pw": pw_hash,
+        "user_name": user_name,
+        "user_profile": uuid_filename,
+        "user_message": user_message
+    })
     return jsonify({"status": "success"})
 
 
@@ -174,7 +180,7 @@ def quiz(token):
     query = [
         {'$sample': {'size': 10}},
         {'$project': {'_id': 0, 'user_id': 1, 'user_name': 1,
-                      'user_profile': 1}}
+                      'user_profile': 1, 'user_message':1}}
     ]
     random_users = db.jungle.aggregate(query)
     users = [user for user in random_users]

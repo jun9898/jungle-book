@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/css/quiz.css">
     <script>
+        const answers = [
+            "다 제가 부족한 탓이겠죠...",
+            "정말 속상하네요.",
+            "저도 당신 이름 몰라요.",
+            "무...무슨....",
+        ]
         var count_num = 1;
         var user = [];
         var score = 0;
@@ -38,7 +44,10 @@
                 $("#answerMessage").html("정답입니다!");
                 score++;
             } else {
-                $("#answerMessage").html("<strong style='color:red;'>" + answer + "</strong>" + "(이)라구요? 틀렸습니다...&nbsp아.. 제 이름은&nbsp" + "<strong style='color:yellow;'>" + user[count_num].user_name + "</strong>" + " 입니다!");
+                let message = user[count_num].user_message ? user[count_num].user_message : answers[Math.floor(Math.random() * answers.length)];
+                $("#answerMessage").html(`
+                <strong style='color:#00d67a;'> ${user[count_num].user_name} :&nbsp </strong>
+                <strong> ${message} </strong>`);
             }
             $(".bi-caret-right-fill").show();
             $("#answer").prop("disabled", true);
