@@ -12,7 +12,6 @@ from decorator import require_access_token
 from route import bp
 from secret_key import SECRET_KEY
 
-
 app = Flask(__name__)
 
 app.config['JWT_SECRET_KEY'] = SECRET_KEY

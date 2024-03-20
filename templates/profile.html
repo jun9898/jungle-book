@@ -52,7 +52,7 @@
 
         function display_empty_comment() {
             let text = `<div class="d-flex justify-content-center align-items-center user_profile_container" style="margin-bottom: 0px">
-                            <h3>아직 작성된 댓글이 없습니다.</h3>
+                            <h3>남겨진 첫인상이 없습니다.</h3>
                         </div >`
             $("#comment_list").append(text);
         }
@@ -81,19 +81,28 @@
             }
         }
 
+        function goBack() {
+            window.history.back(); // 이전 페이지로 이동
+        }
+
     </script>
 </head>
 
 <body>
     <div class="container text-center">
         <div class="row justify-content-center">
-            <div class="logo">
-                <img src="../static/assat/profile.png" class="img-fluid logo" alt="mypage" id="mypage">
-            </div>
+            <a href="/" class="logo">
+                {% if data.check_mypage %}
+                    <img src="../static/assat/mypage.png" class="img-fluid logo" alt="mypage" id="mypage">
+                {% else %}
+                    <img src="../static/assat/profile.png" class="img-fluid logo" alt="mypage" id="mypage">
+                {% endif %}
+            </a>
         </div>
         <div class="container text-center">
             <div class="row justify-content-center">
                 <div class="col-6 users_container p-5 profile_container">
+                    <button class="btn btn-primary btn-dark" style="margin-bottom: 20px" onclick="goBack()">로비로</button>
                     <div class="profile_info">
                         <div class="profile">
                             <div class="profile_img_container">

@@ -119,3 +119,22 @@ def profile(token):
         else:
             data = {"user": user, "check_mypage": check_mypage}
         return render_template('profile.html', data=data)
+
+@bp.route('/mypage')
+@require_access_token
+def mypage(token):
+    check_mypage = True
+    user = db.jungle.find_one({"user_id": token}, {
+        "_id": 0, "user_id": 1, "user_profile": 1, "score": 1})
+    user_score = user.get("score")
+
+    if user_score:
+        high_score = user_score
+
+    if user:
+        if user_score:
+            data = {"user": user, "check_mypage": check_mypage,
+                    "score": high_score}
+        else:
+            data = {"user": user, "check_mypage": check_mypage}
+        return render_template('profile.html', data=data)
