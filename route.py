@@ -103,7 +103,7 @@ def profile(token):
     check_mypage = False
     user_id = request.args.get("user_id")
     user = db.jungle.find_one({"user_id": user_id}, {
-                              "_id": 0, "user_id": 1, "user_profile": 1, "score": 1, "user_name" : 1})
+                              "_id": 0, "user_id": 1, "user_profile": 1, "score": 1, "user_name": 1})
     user_score = user.get("score")
 
     if user_score:
@@ -115,10 +115,11 @@ def profile(token):
     if user:
         if user_score:
             data = {"user": user, "check_mypage": check_mypage,
-                    "score": high_score}
+                    "score": int(high_score)}
         else:
             data = {"user": user, "check_mypage": check_mypage}
         return render_template('profile.html', data=data)
+
 
 @bp.route('/mypage')
 @require_access_token
@@ -134,7 +135,7 @@ def mypage(token):
     if user:
         if user_score:
             data = {"user": user, "check_mypage": check_mypage,
-                    "score": high_score}
+                    "score": int(high_score)}
         else:
             data = {"user": user, "check_mypage": check_mypage}
         return render_template('profile.html', data=data)
