@@ -25,10 +25,11 @@
 
 
                         if (signImage.src !== '') {
+                            formData.delete('user_profile');
                             URL.revokeObjectURL(signImage.src);
                             signImage.src = '';
                         }
-
+                        console.log(newImageUrl);
                         signImage.setAttribute('src', newImageUrl);
                     } else {
                         console.error(response.message);

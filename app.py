@@ -40,7 +40,7 @@ def upload_image():
 
     # 이미지 파일 URL 생성
     image_url = f'http://localhost:5000/{save_path} '
-    return jsonify({'result': 'success', 'image_url': image_url})
+    return jsonify({'result': 'success', 'image_url': save_path})
 
 
 @app.route('/sign_in', methods=['POST'])
