@@ -230,3 +230,11 @@
     padding: 7px 13px 7px 13px;
     background-color: rgba(205, 205, 205, 0.2);
 }
+
+.medal {
+    margin-top: -10px;
+    margin-left: 5px;
+    max-height: 30px;
+    max-width: 30px;
+    justify-content: center;
+}

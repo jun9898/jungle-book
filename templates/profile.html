@@ -93,9 +93,9 @@
         <div class="row justify-content-center">
             <a href="/" class="logo">
                 {% if data.check_mypage %}
-                <img src="../static/assat/mypage.png" class="img-fluid logo" alt="mypage" id="mypage">
+                <img src="../static/assat/mypage.png" class="img-fluid logo" alt="mypage">
                 {% else %}
-                <img src="../static/assat/profile.png" class="img-fluid logo" alt="mypage" id="mypage">
+                <img src="../static/assat/profile.png" class="img-fluid logo" alt="mypage">
                 {% endif %}
             </a>
         </div>
@@ -114,16 +114,15 @@
                                 </div>
                                 <div>
                                     {% if not data.score %}
-                                    <img src="../static/assat/bronze.png" class="img-fluid logo" alt="bronze"
-                                        id="bronze">
+                                    <img src="../static/assat/bronze.png" class="img-fluid medal" alt="bronze">
                                     {% elif (data.score > 0) and (data.score < 5) %} <img
-                                        src="../static/assat/bronze.png" class="img-fluid logo" alt="bronze"
+                                        src="../static/assat/bronze.png" class="img-fluid medal" alt="bronze"
                                         id="bronze">
                                         {% elif (data.score >= 5) and (data.score < 8) %} <img
-                                            src="../static/assat/silver.png" class="img-fluid logo" alt="silver"
+                                            src="../static/assat/silver.png" class="img-fluid medal" alt="silver"
                                             id="silver">
                                             {% else %}
-                                            <img src="../static/assat/gold.png" class="img-fluid logo" alt="gold"
+                                            <img src="../static/assat/gold.png" class="img-fluid medal" alt="gold"
                                                 id="gold">
                                             {% endif %}
                                 </div>
