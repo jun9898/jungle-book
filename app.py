@@ -1,12 +1,14 @@
+from decorator import require_access_token
 import hashlib
-from flask import Flask, jsonify, request
-from route import bp
-from flask_jwt_extended import JWTManager, create_refresh_token, create_access_token, get_jwt_identity, jwt_required
-from pymongo import MongoClient
-from secret_key import SECRET_KEY
-client = MongoClient('localhost', 27017)
-db = client.jungle
+import uuid
 
+from flask import Flask, jsonify, request, render_template
+from flask_jwt_extended import JWTManager, create_refresh_token, create_access_token, get_jwt_identity, jwt_required, \
+    set_access_cookies, set_refresh_cookies, unset_jwt_cookies
+
+from database import db
+from route import bp
+from secret_key import SECRET_KEY
 
 app = Flask(__name__)
 
@@ -29,7 +31,11 @@ def api_register():
     file = request.files['user_profile']
     if file.filename == "":
         return jsonify({"result": "No selected file"})
-    save_path = './static/profile/' + file.filename
+    file_extension = file.filename.split('.')[-1]  # 파일 확장자 추출
+    uuid_filename = str(uuid.uuid4()) + '.' + file_extension  # UUID를 포함한 새로운 파일 이름 생성
+
+    # 파일 저장 경로 설정
+    save_path = './static/profile/' + uuid_filename
     file.save(save_path)
 
     pw_hash = hashlib.sha256(user_pw.encode('utf-8')).hexdigest()
@@ -38,7 +44,7 @@ def api_register():
 
     if result is None:
         db.jungle.insert_one(
-            {"user_id": user_id, "user_pw": pw_hash, "user_name": user_name, "user_profile": file.filename})
+            {"user_id": user_id, "user_pw": pw_hash, "user_name": user_name, "user_profile": uuid_filename})
         return jsonify({"status": "success"})
 
     # 회원가입 실패 로직
@@ -56,36 +62,39 @@ def login():
 
     if result is not None:
         access_token = create_access_token(identity=user_id)
+        print(access_token)
         refresh_token = create_refresh_token(identity=user_id)
-        tokens = {'access_token': access_token, 'refresh_token': refresh_token}
-        return jsonify({"result": "success", "tokens": tokens})
+        resp = jsonify({'login': True})
+        set_access_cookies(resp, access_token)
+        set_refresh_cookies(resp, refresh_token)
+        return resp, 200
     else:
         response = jsonify({"error": "로그인에 실패했습니다."})
         response.status_code = 401  # Unauthorized
         return response
 
 
-@app.route('/list', methods=['GET'])
-@jwt_required()
-def list():
-    users = db.jungle.find({}, {"_id": 0})
-    user_list = [user for user in users]
-    return jsonify({"result": "success", "users": user_list})
+@app.route('/logout', methods=['POST'])
+def logout():
+    resp = jsonify({'logout': True})
+    unset_jwt_cookies(resp)
+    return resp, 200
 
 
 @app.route('/get_user', methods=['GET'])
-@jwt_required()
-def get_user():
-    user_id = request.form['user_id']
-    user = db.jungle.find_one({'user_id': user_id}, {"_id": 0})
+@require_access_token
+def get_user(token):
+    user_id = token
+    user = db.jungle.find_one({'user_id': user_id},
+                              {"_id": 0, "user_id": 1, "user_profile": 1, "comments": 1})
     return jsonify({"result": "success", "user": user})
 
 
 @app.route('/add_comment', methods=['POST'])
-@jwt_required()
-def add_comment():
+@require_access_token
+def add_comment(token):
     user_id = request.form['user_id']
-    login_user = get_jwt_identity()
+    login_user = token
     login_user_info = db.jungle.find_one(
         {'user_id': login_user}, {'comments': 0, '_id': 0, 'user_pw': 0})
     comment_text = request.form['comment']
@@ -103,9 +112,14 @@ def add_comment():
     return jsonify({"result": "success", "comment": comment})
 
 
+@app.errorhandler(ValueError)
+def handle_value_error(error):
+    # 에러를 받아서 에러 페이지를 렌더링합니다.
+    return render_template('error.html', error=error), 400
+
 @app.route('/random_users', methods=['GET'])
-# @jwt_required()
-def quiz():
+@require_access_token
+def quiz(token):
     query = [
         {'$sample': {'size': 10}},
         {'$project': {'_id': 0, 'user_id': 1, 'user_name': 1,
@@ -117,10 +131,16 @@ def quiz():
 
 
 @app.route('/score', methods=['POST'])
-# @jwt_required()
-def score():
+@require_access_token
+def score(token):
     score = request.form['score']
     return jsonify({"result": "success", "score": score})
+
+
+@app.errorhandler(ValueError)
+def handle_value_error(error):
+    # 에러를 받아서 에러 페이지를 렌더링합니다.
+    return render_template('error.html', error=error), 400
 
 
 if __name__ == '__main__':

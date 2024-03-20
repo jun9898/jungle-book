@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="/static/css/index.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <div id="loginLinks" style="text-align: right; flex-direction: column; margin: 10px">
     <span><a href="/login" style="font-size: 12px; text-decoration: none; color: white;">로그인</a></span>
     <span style="font-size: 12px">/</span>
@@ -20,34 +21,53 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        var loginLinks = document.getElementById('loginLinks');
-        var logoutLinks = document.getElementById('logoutLinks');
-        var logoutBtn = document.getElementById('logoutBtn');
-
-        var accessTokenKey = 'accessToken';
-        var refreshTokenKey = 'refreshToken';
-
-        var logout = function() {
-            localStorage.removeItem(accessTokenKey);
-            localStorage.removeItem(refreshTokenKey);
-            // 이후 추가적인 로그아웃 처리 작업을 수행할 수 있습니다.
-        };
-
-        logoutBtn.addEventListener('click', function(event) {
-            event.preventDefault();
-            logout();
-            loginLinks.style.display = 'block'; // 로그아웃 후 loginLinks를 보여줍니다.
-            logoutLinks.style.display = 'none'; // 로그아웃 후 logoutLinks를 숨깁니다.
-        });
-
-        var accessToken = localStorage.getItem(accessTokenKey);
-
-        if (accessToken) {
-            loginLinks.style.display = 'none'; // accessToken이 있을 경우 loginLinks를 숨깁니다.
-            logoutLinks.style.display = 'block'; // accessToken이 있을 경우 logoutLinks를 보여줍니다.
-        } else {
-            loginLinks.style.display = 'block'; // accessToken이 없을 경우 loginLinks를 보여줍니다.
-            logoutLinks.style.display = 'none'; // accessToken이 없을 경우 logoutLinks를 숨깁니다.
+        // 쿠키에서 access_token을 가져오는 함수
+        function getCookie(name) {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    return cookie.substring(name.length + 1);
+                }
+            }
         }
+
+        function logout() {
+            // 서버에 로그아웃 요청을 보내는 AJAX 요청 생성
+            $.ajax({
+                url: '/logout', // 로그아웃 요청을 처리하는 서버의 엔드포인트로 URL을 변경하세요.
+                type: 'POST', // 요청 메서드
+                success: function(response) {
+                    // 요청이 성공했을 때의 동작
+                    alert("로그아웃 성공!")
+                    window.location.href = "/"
+                    // 여기에 추가적인 로직을 작성하세요. 예를 들어 페이지 새로고침 등의 동작을 수행할 수 있습니다.
+                },
+                error: function(xhr, status, error) {
+                    // 요청이 실패했을 때의 동작
+                    console.error('로그아웃에 실패했습니다.');
+                }
+            });
+        }
+
+        // access_token이 있는지 확인
+        const access_token = getCookie('csrf_access_token');
+        if (access_token) {
+            // 로그인 링크 숨기고 로그아웃 링크 보이기
+            document.getElementById('loginLinks').style.display = 'none';
+            document.getElementById('logoutLinks').style.display = 'block';
+        } else {
+            // access_token이 없으면 로그인 링크 보이고 로그아웃 링크 숨기기
+            document.getElementById('loginLinks').style.display = 'block';
+            document.getElementById('logoutLinks').style.display = 'none';
+        }
+
+        // 로그아웃 버튼을 클릭했을 때의 동작 설정
+        document.getElementById('logoutBtn').addEventListener('click', function(event) {
+            // 쿠키 삭제
+            logout()
+            // 기본 동작 중단 (a 태그의 기본 동작인 페이지 이동을 막음)
+            event.preventDefault();
+        });
     });
 </script>

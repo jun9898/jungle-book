@@ -8,8 +8,9 @@
         $(document).ready(function() {
             $("form").submit(function(event) {
                 event.preventDefault();
+                const [$formDom] = $(this)
 
-                var formData = new FormData($(this)[0]);
+                var formData = new FormData($formDom);
 
                 $.ajax({
                     url: "/user-login",
@@ -18,10 +19,7 @@
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        const tokens = response.tokens
                         alert("로그인 성공!")
-                        localStorage.setItem("accessToken", tokens.access_token)
-                        localStorage.setItem("refreshToken", tokens.refresh_token)
                         window.location.href = "/";
                     },
                     error: function(xhr, status, error) {
@@ -38,9 +36,6 @@
     <img class="label" onclick="location.href='/'"  src="./static/assat/jungle_book.png"><br>
 </div>
 
-<div>
-
-</div>
 <div style="padding: 50px;">
     <div class="posting-box">
         <h1 style="text-align:center; font-weight : bold;">Login</h1>

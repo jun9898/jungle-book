@@ -11,10 +11,10 @@
 
 .user_profile {
     max-width: 300px;
-    max-height: 500px;
+    max-height: 450px;
     height: auto;
     width: 30rem;
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
     border-radius: 30px;
 }
 
@@ -27,6 +27,7 @@
     display: flex;
     justify-content: center; /* 수평 중앙 정렬 */
     align-items: center; /* 수직 중앙 정렬 */
+    margin-bottom: 1.5rem;
 }
 
 .input-group {
@@ -59,4 +60,18 @@
     transform: translateX(50%);
     color: #00d67a;
     font-size: 12rem;
+}
+
+#answerMessage{
+    background-color: rgb(54, 62, 59);
+    min-height: 100px;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 10px;
+    border: 10px solid #00d67a;
+    border-style: inset;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

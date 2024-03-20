@@ -9,84 +9,40 @@
 <body>
 <div class="container text-center">
     <div class="row justify-content-center">
-        <div class="logo">
+        <a href="/" class="logo">
             <img src="../static/assat/jungle_book.png" class="img-fluid logo" alt="Jungle Book">
-        </div>
+        </a>
     </div>
     <div class="container text-center">
         <div class="row justify-content-center">
-            <div class="col-6 users_container p-5">
+            <div class="col-6 users_container p-5" id="content_container">
 
+
+                {% for user in data.user_list %}
                 <div class="d-flex justify-content-between align-items-center user_profile_container">
                     <div class="d-flex flex-row align-items-center">
-                        <img class="user_profile_img" src="../static/assat/dog.jpg">
-                        <span class="user_profile_name">멍멍이</span>
+                        <img class="user_profile_img" src="../static/profile/{{ user.user_profile }}">
+                        <span class="user_profile_name">{{ user.user_name }}</span> <!-- user 객체의 이름 속성을 사용하세요 -->
                     </div>
                     <button class="btn btn-primary user_profile_button">첫인상 남기기</button>
                 </div>
+                {% endfor %}
 
-                <div class="d-flex justify-content-between align-items-center user_profile_container">
-                    <div class="d-flex flex-row align-items-center">
-                        <img class="user_profile_img" src="../static/assat/dog.jpg">
-                        <span class="user_profile_name">멍멍이</span>
-                    </div>
-                    <button class="btn btn-primary user_profile_button">첫인상 남기기</button>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center user_profile_container">
-                    <div class="d-flex flex-row align-items-center">
-                        <img class="user_profile_img" src="../static/assat/dog.jpg">
-                        <span class="user_profile_name">멍멍이</span>
-                    </div>
-                    <button class="btn btn-primary user_profile_button">첫인상 남기기</button>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center user_profile_container">
-                    <div class="d-flex flex-row align-items-center">
-                        <img class="user_profile_img" src="../static/assat/dog.jpg">
-                        <span class="user_profile_name">멍멍이</span>
-                    </div>
-                    <button class="btn btn-primary user_profile_button">첫인상 남기기</button>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center user_profile_container">
-                    <div class="d-flex flex-row align-items-center">
-                        <img class="user_profile_img" src="../static/assat/dog.jpg">
-                        <span class="user_profile_name">멍멍이</span>
-                    </div>
-                    <button class="btn btn-primary user_profile_button">첫인상 남기기</button>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center user_profile_container">
-                    <div class="d-flex flex-row align-items-center">
-                        <img class="user_profile_img" src="../static/assat/dog.jpg">
-                        <span class="user_profile_name">멍멍이</span>
-                    </div>
-                    <button class="btn btn-primary user_profile_button">첫인상 남기기</button>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center user_profile_container">
-                    <div class="d-flex flex-row align-items-center">
-                        <img class="user_profile_img" src="../static/assat/dog.jpg">
-                        <span class="user_profile_name">멍멍이</span>
-                    </div>
-                    <button class="btn btn-primary user_profile_button">첫인상 남기기</button>
-                </div>
                 <div class="container text-center pagination_container">
                     <nav aria-label="Page navigation">
                         <ul class="pagination justify-content-center">
                             <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
+                                <a class="page-link" href="/list?page={{ data.start_page - 5 }}" aria-label="Next">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">4</a></li>
-                            <li class="page-item"><a class="page-link" href="#">5</a></li>
+                            {% for page in data.page_list %}
+                            <li class="page-item {% if page == data.cur_page %}active{% endif %}">
+                                <a class="page-link" href="/list?page={{ page }}">{{ page }}</a>
+                            </li>
+                            {% endfor %}
                             <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
+                                <a class="page-link" href="/list?page={{ data.start_page + 5 }}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
@@ -98,6 +54,5 @@
 
     </div>
 </div>
-
 </body>
 </html>
