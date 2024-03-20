@@ -6,23 +6,6 @@
     {% include 'header.html' %}
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/css/result.css">
-    <script>
-        var score = localStorage.getItem('score');
-        var max_count = localStorage.getItem('max_count');
-        $(document).ready(function () {
-            display_score()
-        })
-
-        function display_score() {
-            $(".score-board").text(score + " / " + max_count);
-        }
-
-        function go_home() {
-            localStorage.removeItem("score");
-            localStorage.removeItem("max_count");
-            location.href = '/';
-        }
-    </script>
 </head>
 
 <body>
@@ -31,8 +14,9 @@
             <img src="/static/assat/your_score.png">
         </div>
         <div class="score-board">
+            <a>{{ data.score }} / {{ data.max_count }}</a>
         </div>
-        <button type="button" class="btn btn-outline-secondary" onclick="go_home()">Home</button>
+        <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/'">Home</button>
     </div>
 </body>
 

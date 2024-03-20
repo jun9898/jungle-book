@@ -71,8 +71,29 @@ def quiz(token):
 
 @bp.route('/result')
 @require_access_token
-def result(tokens):
-    return render_template('result.html')
+def result(token):
+    score = request.args.get("score")
+    max_count = request.args.get("max_count")
+
+    # 사용자 데이터 조회
+    user = db.jungle.find_one({'user_id': token})
+
+    existing_score = user.get('score')
+
+    if existing_score:
+        if int(existing_score) < int(score):
+            db.jungle.update_one(
+                {'user_id': token},
+                {'$set': {'score': score}}
+            )
+    else:
+        db.jungle.update_one(
+            {'user_id': token},
+            {'$set': {'score': score}}
+        )
+
+    data = {"score": score, "max_count": max_count}
+    return render_template('result.html', data=data)
 
 
 @bp.route('/profile')
@@ -82,14 +103,19 @@ def profile(token):
     check_mypage = False
     user_id = request.args.get("user_id")
     user = db.jungle.find_one({"user_id": user_id}, {
-                              "_id": 0, "user_id": 1, "user_profile": 1, "user_name": 1 })
+                              "_id": 0, "user_id": 1, "user_profile": 1, "score": 1})
+    user_score = user.get("score")
+
+    if user_score:
+        high_score = user_score
+
     if token == user_id:
         check_mypage = True
 
     if user:
-        # 사용자 데이터가 존재하는 경우
-        data = {"user": user, "check_mypage": check_mypage}
+        if user_score:
+            data = {"user": user, "check_mypage": check_mypage,
+                    "score": high_score}
+        else:
+            data = {"user": user, "check_mypage": check_mypage}
         return render_template('profile.html', data=data)
-    else:
-        # 사용자 데이터가 존재하지 않는 경우
-        return jsonify({"error": "User not found"}), 404
