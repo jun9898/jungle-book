@@ -19,9 +19,14 @@ from secret_key import SECRET_KEY
 client = MongoClient('localhost', 27017)
 db = client.jungle
 
+###CORS import
+from flask_cors import CORS
+###
 
 app = Flask(__name__)
-
+###app의 CORS를 활성화
+CORS(app)
+###
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
 app.register_blueprint(bp)
 jwt = JWTManager(app)
