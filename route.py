@@ -1,6 +1,5 @@
 import math
-import jwt
-from flask import Blueprint, render_template, request
+from flask import Blueprint, jsonify, render_template, request
 from database import db
 from decorator import require_access_token
 
@@ -91,3 +90,6 @@ def profile(token):
         # 사용자 데이터가 존재하는 경우
         data = {"user": user, "check_mypage": check_mypage}
         return render_template('profile.html', data=data)
+    else:
+        # 사용자 데이터가 존재하지 않는 경우
+        return jsonify({"error": "User not found"}), 404

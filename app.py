@@ -5,7 +5,7 @@ import os
 import uuid
 
 from bson import ObjectId
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, redirect, request, render_template, url_for
 from flask_jwt_extended import JWTManager, create_refresh_token, create_access_token, get_jwt_identity, jwt_required, \
     set_access_cookies, set_refresh_cookies, unset_jwt_cookies
 
@@ -59,7 +59,6 @@ def api_register():
 
     if user:
         return jsonify({"status": "error", "message": "중복된 ID입니다."})
-
 
     user_pw = request.form['user_pw']
     user_name = request.form['user_name']
@@ -129,6 +128,7 @@ def get_user(token):
 
     # 댓글 데이터 조회
     comments = user.get("comments", [])
+    comments = comments[::-1]
     comments_count = len(comments)
 
     # 페이지에 맞게 댓글 데이터를 자르기
@@ -167,7 +167,8 @@ def add_comment(token):
         {'$push': {'comments': comment}}
     )
 
-    return jsonify({"result": "success", "comment": comment})
+    # 프로필 페이지로 리다이렉트하여 새로고침을 유도
+    return redirect(url_for('routes.profile', user_id=user_id))
 
 
 @app.errorhandler(ValueError)
