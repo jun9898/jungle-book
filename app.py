@@ -16,9 +16,6 @@ from flask_jwt_extended import JWTManager, create_refresh_token, create_access_t
 from pymongo import MongoClient
 from secret_key import SECRET_KEY
 
-client = MongoClient('localhost', 27017)
-db = client.jungle
-
 ###CORS import
 from flask_cors import CORS
 ###
