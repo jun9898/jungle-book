@@ -30,7 +30,6 @@
                             URL.revokeObjectURL(signImage.src);
                             signImage.src = '';
                         }
-                        console.log(newImageUrl);
                         signImage.setAttribute('src', newImageUrl);
                     } else {
                         console.error(response.message);
@@ -54,14 +53,6 @@
                 return; // 데이터가 비어 있으면 함수 종료
             }
 
-            // 입력 필드 초기화
-            document.querySelector(".form-ID").value = "";
-            document.querySelector(".form-PW").value = "";
-            document.querySelector(".form-NAME").value = "";
-            document.querySelector("#user_profile").value = "";
-            document.querySelector(".user_message").value = "";
-
-
             const formData = new FormData();
             formData.append('user_id', id);
             formData.append('user_pw', pw);
@@ -77,9 +68,7 @@
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    console.log(response.status);
                     if (response.status === 'success') {
-                        console.log("success")
                         alert("회원가입 성공!");
                         window.location.href = "/login"
                     } else {

@@ -200,5 +200,24 @@ def handle_value_error(error):
     return render_template('error.html', error=error), 400
 
 
+@app.route('/update_profile', methods=['POST'])
+@require_access_token
+def update_image(token):
+    file = request.files.get("update_profile")
+    # 이미지 파일이 요청에 있는지 확인
+    if 'update_profile' not in request.files:
+        return jsonify({'error': 'No file part'})
+    old_user = db.jungle.find_one({'user_id': token}, {"user_profile": 1})
+
+    # 파일이 비어있는지 확인
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'})
+
+    # 허용된 파일인지 확인
+    filename = old_user["user_profile"]  # 덮어쓸 파일명
+    file.save(os.path.join("./static/profile/" + filename))
+    return jsonify({'status': 'success'})
+
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

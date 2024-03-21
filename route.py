@@ -55,11 +55,6 @@ def list(decode_token):
     data = {"user_list": user_list, "start_page": start_page,
             "page_list": page_list, "cur_page": cur_page}
 
-    print("total_page", total_page)
-    print("cur_page", cur_page)
-    print("page_list", page_list)
-    print("start_page", start_page)
-
     return render_template('list.html', data=data)
 
 

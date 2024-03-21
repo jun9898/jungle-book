@@ -13,6 +13,10 @@
         $(document).ready(function () {
             $(".next-btn").show();
             next_page(page);
+
+            $("#update_profile").change(function () {
+                update_profile();
+            });
         })
 
 
@@ -39,7 +43,6 @@
                     }
                 }
             })
-
         }
 
         function display_comment_list(comment, writter) {
@@ -87,6 +90,32 @@
             window.history.back(); // 이전 페이지로 이동
         }
 
+        function update_profile() {
+            var update_profile = document.querySelector("#update_profile").files[0];
+            const formData = new FormData();
+            // 파일 객체가 아닌 파일 이름 추가
+            formData.append('update_profile', update_profile);
+            $.ajax({
+                type: "POST",
+                url: "/update_profile",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response.status);
+                    if (response.status === 'success') {
+                        alert("프로필이 변경 완료!");
+                        window.location.reload();
+                    } else {
+                        alert("프로필 변경 실패" + response.error);
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert("잠시 후 다시 시도해주세요.");
+                }
+            });
+        }
+
     </script>
 </head>
 
@@ -108,7 +137,14 @@
                     <div class="profile_info">
                         <div class="profile">
                             <div class="profile_img_container">
+                                {% if data.check_mypage %}
+                                <label for="update_profile">
+                                    <img src="../static/profile/{{ data.user.user_profile }}" alt="유저 프로필">
+                                </label>
+                                <input type="file" name="update_profile" id="update_profile" style="display: none;">
+                                {% else %}
                                 <img src="../static/profile/{{ data.user.user_profile }}" alt="유저 프로필">
+                                {% endif %}
                             </div>
                             <div class="user_profile_info">
                                 <div>
