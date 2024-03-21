@@ -101,6 +101,14 @@
         </td>
     </tr>
     <tr>
+        <td>마이페이지 프로필 사진 변경</td>
+    </tr>
+    <tr>
+        <td>
+            <img src="https://github.com/jun9898/jungle_book/assets/129564528/0acde9e4-f45c-4df4-80a5-8699bb47b5fe">
+        </td>
+    </tr>
+    <tr>
         <td>친구 얼굴 맞추기 퀴즈 (오답시 친구가 회원가입 하며 등록한 코멘트 확인)</td>
     </tr>
     <tr>
