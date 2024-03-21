@@ -49,8 +49,11 @@ def list(decode_token):
     else:
         page_list.extend(i for i in range(start_page, total_page+1))
 
-    users = db.jungle.find({}, {"_id": 0, "user_pw": 0}).skip(
-        (cur_page-1) * CONTENT_SIZE).limit(CONTENT_SIZE)
+    users = (db.jungle.find({}, {"_id": 0, "user_pw": 0})
+             .sort({"name": 1})
+             .skip((cur_page-1) * CONTENT_SIZE)
+             .limit(CONTENT_SIZE))
+
     user_list = [user for user in users]
     data = {"user_list": user_list, "start_page": start_page,
             "page_list": page_list, "cur_page": cur_page}
